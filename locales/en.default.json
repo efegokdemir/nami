@@ -1,0 +1,6 @@
+{
+  "general": {"meta":{"page":"Page {{ page }}"},"search": {"search":"Search","placeholder":"Search products, collections and more","no_results":"No results found","submit":"Submit search"},"accessibility":{"skip_to_content":"Skip to content","close":"Close","menu":"Menu","cart":"Cart","loading":"Loading","opens_in_new_tab":"Opens in a new tab"}},
+  "products": {"product":{"add_to_cart":"Add to cart","sold_out":"Sold out","unavailable":"Unavailable","quantity":"Quantity","view_details":"View details","choose_options":"Choose options","quick_add":"Quick add","from":"From","on_sale":"Sale","sku":"SKU","share":"Share"}},
+  "cart": {"general":{"title":"Your cart","empty":"Your cart is empty","continue_shopping":"Continue shopping","subtotal":"Subtotal","checkout":"Checkout","note":"Order note","update":"Update cart","remove":"Remove","quantity":"Quantity","item_count":"{{ count }} item(s)"},"errors":{"general":"Something went wrong. Please try again."}},
+  "sections": {"newsletter":{"heading":"Stay in the know","success":"Thanks for subscribing."},"contact":{"success":"Thanks for contacting us."}}
+}

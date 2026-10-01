@@ -1,0 +1,1 @@
+{"sections":{"hero":{"type":"hero-banner"},"intro":{"type":"rich-text"},"collection":{"type":"featured-collection"},"story":{"type":"image-with-text"},"journal":{"type":"featured-blog"},"faq":{"type":"faq"},"newsletter":{"type":"newsletter"}},"order":["hero","intro","collection","story","journal","faq","newsletter"]}

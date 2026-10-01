@@ -1,0 +1,2 @@
+<section class="marquee color-{{ section.settings.color_scheme }}" aria-label="{{ section.settings.text }}"><div class="marquee__track">{% for i in (1..4) %}<span>{{ section.settings.text }}</span><span aria-hidden="true">✦</span>{% endfor %}</div></section>
+{% schema %}{"name":"Marquee","settings":[{"type":"text","id":"text","label":"Text","default":"Made for the everyday"},{"type":"color_scheme","id":"color_scheme","label":"Color scheme","default":"scheme-2"}],"presets":[{"name":"Marquee"}]}{% endschema %}

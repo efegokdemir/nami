@@ -1,0 +1,3 @@
+{% if image != blank %}
+  {{ image | image_url: width: width | image_tag: widths: '320,480,640,800,1000,1200,1600', sizes: sizes, loading: loading, fetchpriority: fetchpriority, class: class, alt: image.alt | escape }}
+{% else %}<div class="media-placeholder" aria-hidden="true">Nami</div>{% endif %}

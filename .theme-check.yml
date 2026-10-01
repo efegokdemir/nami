@@ -1,0 +1,5 @@
+root: .
+extends: theme-check:recommended
+ignore:
+  - 'config/settings_data.json'
+  - 'node_modules/**'

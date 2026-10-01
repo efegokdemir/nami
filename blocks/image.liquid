@@ -1,0 +1,2 @@
+<div class="theme-block theme-block--image" {{ block.shopify_attributes }}>{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 1200 | image_tag: widths: '320,640,1000,1200', sizes: '100vw', alt: block.settings.alt }}{% else %}<div class="media-placeholder">Add an image</div>{% endif %}</div>
+{% schema %}{"name":"Image","settings":[{"type":"image_picker","id":"image","label":"Image"},{"type":"text","id":"alt","label":"Alt text","default":""}],"presets":[{"name":"Image"}]}{% endschema %}

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <title>{% if page_title %}{{ page_title }}{% if current_tags %} – {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} – {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% else %}{{ shop.name }}{% endif %}</title>
+    {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+    {{ content_for_header }}
+    {{ 'nami.css.liquid' | asset_url | stylesheet_tag }}
+    <style>
+      :root { --page-width: {{ settings.page_width }}px; --section-space: {{ settings.section_spacing }}px; --logo-width: {{ settings.logo_width }}px; }
+      {{ settings.heading_font | font_face: font_display: 'swap' }}{{ settings.body_font | font_face: font_display: 'swap' }}
+    </style>
+  </head>
+  <body class="preset-{{ settings.style_preset }} radius-{{ settings.radius }} motion-{{ settings.motion }}">
+    <a class="skip-link" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
+    {% sections 'header-group' %}
+    <main id="MainContent" role="main">{{ content_for_layout }}</main>
+    {% sections 'footer-group' %}
+    <div class="live-region" aria-live="polite" aria-atomic="true" data-live-region></div>
+    {% render 'cart-drawer' %}
+    <script>window.namiMoneyFormat={{ shop.money_format | json }};window.namiEmptyLabel={{ 'cart.general.empty' | t | json }};window.namiRemoveLabel={{ 'cart.general.remove' | t | json }};window.namiAddLabel={{ 'products.product.add_to_cart' | t | json }};window.namiSoldOutLabel={{ 'products.product.sold_out' | t | json }};window.namiNoResultsLabel={{ 'general.search.no_results' | t | json }};</script>
+    <script src="{{ 'nami.js' | asset_url }}" defer></script>
+  </body>
+</html>
