@@ -1,7 +1,7 @@
-.git/
-.github/
-docs/
-tests/
+.git/*
+.github/*
+docs/*
+tests/*
 *.md
 *.zip
-node_modules/
+node_modules/*
