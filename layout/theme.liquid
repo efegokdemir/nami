@@ -8,7 +8,7 @@
     {{ content_for_header }}
     {{ 'nami-theme.css' | asset_url | stylesheet_tag }}
     <style>
-      :root { --page-width: {{ settings.page_width }}px; --section-space: {{ settings.section_spacing }}px; --logo-width: {{ settings.logo_width }}px; }
+      :root { --page-width: {{ settings.page_width }}px; --section-space: {{ settings.section_spacing }}px; --logo-width: {{ settings.logo_width }}px; --muted: #625b55; }
       {{ settings.heading_font | font_face: font_display: 'swap' }}{{ settings.body_font | font_face: font_display: 'swap' }}
     </style>
   </head>
