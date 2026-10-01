@@ -6,7 +6,7 @@
     <title>{% if page_title %}{{ page_title }}{% if current_tags %} – {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} – {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% else %}{{ shop.name }}{% endif %}</title>
     {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
     {{ content_for_header }}
-    {{ 'nami.css' | asset_url | stylesheet_tag }}
+    {{ 'nami-theme.css' | asset_url | stylesheet_tag }}
     <style>
       :root { --page-width: {{ settings.page_width }}px; --section-space: {{ settings.section_spacing }}px; --logo-width: {{ settings.logo_width }}px; }
       {{ settings.heading_font | font_face: font_display: 'swap' }}{{ settings.body_font | font_face: font_display: 'swap' }}
