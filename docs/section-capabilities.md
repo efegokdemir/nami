@@ -62,13 +62,8 @@ The complete pre-overhaul inventory and weakness audit is in [section-audit.md](
 
 ## Upgrade risks from v0.2.0
 
-- Comparison table changes from `column` blocks (`name`, `row_one_value`, `row_two_value`, `row_three_value`) and section-level row names to `row` blocks (`label`, `value_1` through `value_4`). There is no automatic migration or legacy-column renderer. Existing configurations can become invalid and their content is not read by the new renderer. Export the old configuration and recreate the comparison in an unpublished copy before upgrading.
-- Image with text replaces `reverse` with `media_position`; saved `reverse: true` does not carry over. Set the new media position explicitly.
-- Product carousel replaces `limit` with `products_to_show`; the old saved count is not read. Reapply the desired count using the existing new control.
-- Removed eyebrow fields and Featured Product's former button label are not migrated. Review saved content and merchant customizations in an unpublished copy.
-
-These risks remain release-review requirements. No legacy controls or comparison-column block are reintroduced by the hardening pass.
+Do not upload unmigrated v0.2 JSON into v0.3. The offline `scripts/migrate-v02.cjs` converts comparison columns to rows, image `reverse`, carousel `limit`, plain-text-to-rich-text fields and the legacy nested global settings shape. It seeds missing color schemes and archives removed copy/custom icon choices for manual review. Unknown customizations fail safely. No legacy controls or comparison-column architecture are reintroduced. The [exact setting inventory and upgrade procedure](upgrade-v02.md) is required for existing installations.
 
 ## Verification scope
 
-The Liquid hardening checks cover image argument delivery, legacy product fallback, parent navigation links, collection app-output gates, cart property/vendor visibility and blank-content/editor handling. They do not establish live Shopify app integration or media playback. The Videographer fixture contains external YouTube media only; it does not validate Shopify-hosted video or 3D models. Actual Shopify swatch-metadata fixtures and installed third-party app output remain unverified. Subscription-only purchase support and saved comparison-table migration remain unresolved risks described above.
+The Liquid hardening checks cover image argument delivery, legacy product fallback, parent navigation links, collection app-output gates, cart property/vendor visibility and blank-content/editor handling. The final-blocker pass additionally verified actual v0.2 saved configurations, migrated comparison content and nested reusable blocks in unpublished QA. Shopify's installed Sign in with Shop app block rendered and reordered in the Product area; temporary changes were undone without saving. This does not establish arbitrary third-party app behavior. The Videographer fixture contains external YouTube media only; Shopify-hosted product video, 3D and actual native swatch metadata remain fixture-dependent external coverage. Native subscription-only purchasing still requires an app integration.

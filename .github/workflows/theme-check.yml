@@ -8,10 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
       - uses: actions/setup-node@v4
         with: {node-version: 22}
       - run: node scripts/validate-theme.cjs
       - run: node scripts/test-hardening.cjs
+      - run: node scripts/test-upgrade.cjs
       - run: node --check assets/nami.js && node --check assets/nami-capabilities.js
       - run: npm install --global @shopify/cli
       - run: shopify theme check --path .
