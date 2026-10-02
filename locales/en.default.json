@@ -13,18 +13,14 @@
       "skip_to_content": "Skip to content",
       "close": "Close",
       "menu": "Menu",
-      "cart": "Cart",
-      "loading": "Loading",
-      "opens_in_new_tab": "Opens in a new tab"
+      "cart": "Cart"
     }
   },
   "products": {
     "product": {
       "add_to_cart": "Add to cart",
       "sold_out": "Sold out",
-      "unavailable": "Unavailable",
       "quantity": "Quantity",
-      "view_details": "View details",
       "choose_options": "Choose options",
       "quick_add": "Quick add",
       "from": "From",
@@ -44,16 +40,11 @@
       "update": "Update cart",
       "remove": "Remove",
       "quantity": "Quantity",
-      "item_count": "{{ count }} item(s)",
       "shipping_at_checkout": "Shipping and taxes calculated at checkout."
-    },
-    "errors": {
-      "general": "Something went wrong. Please try again."
     }
   },
   "sections": {
     "newsletter": {
-      "heading": "Stay in the know",
       "success": "Thanks for subscribing."
     },
     "contact": {

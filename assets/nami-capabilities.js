@@ -2,11 +2,9 @@
   const $ = (selector, root = document) => root?.querySelector(selector);
   const $$ = (selector, root = document) => [...(root?.querySelectorAll(selector) || [])];
   const routes = window.Shopify?.routes?.root || '/';
-  const money = cents => (window.namiMoneyFormat || '${{amount}}').replace(/<[^>]*>/g, '').replace(/\{\{\s*(\w+)\s*\}\}/g, (_, token) => {
-    const parts = (Number(cents || 0) / 100).toFixed(token.includes('no_decimals') ? 0 : 2).split('.');
-    const comma = token.includes('comma_separator'), separator = token.includes('space_separator') ? ' ' : comma ? '.' : ',';
-    return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator) + (parts[1] ? (comma ? ',' : '.') + parts[1] : '');
-  });
+  const money = cents => window.namiMoney(cents);
+  const observers = new Map();
+  const requests = new Map();
   const updateVariant = section => {
     const data = JSON.parse($('[data-product-json]', section)?.textContent || '{}');
     const values = $$('[data-product-option]', section).map(select => select.value);
@@ -16,7 +14,7 @@
       price.replaceChildren(document.createTextNode(variant ? money(variant.price) : 'Unavailable'));
       if (variant?.compare_at_price > variant?.price) { const del = document.createElement('del'); del.textContent = money(variant.compare_at_price); price.append(del); }
     });
-    $$('[data-add-to-cart-button],[data-sticky-submit]',section).forEach(button => { button.disabled = !variant?.available; button.textContent = variant ? (variant.available ? window.namiAddLabel || 'Add to cart' : window.namiSoldOutLabel || 'Sold out') : 'Unavailable'; });
+    $$('[data-add-to-cart-button],[data-sticky-submit]',section).forEach(button => { button.disabled = !variant?.available || Boolean(button.closest('form')?.dataset.submitting); button.textContent = variant ? (variant.available ? window.namiAddLabel || 'Add to cart' : window.namiSoldOutLabel || 'Sold out') : 'Unavailable'; });
     $$('[data-option-buttons]',section).forEach(group => { const value = values[Number(group.dataset.optionButtons)]; $$('[data-option-value]',group).forEach(button => button.setAttribute('aria-pressed',String(button.dataset.optionValue === value))); });
     $$('[data-product-sku]',section).forEach(node => { node.textContent = `SKU: ${variant?.sku || ''}`; });
     $$('[data-product-inventory]',section).forEach(node => { node.textContent = variant?.available ? (node.dataset.showCount === 'true' && variant.inventory_management && variant.inventory_quantity > 0 ? `${variant.inventory_quantity} available` : 'In stock') : window.namiSoldOutLabel || 'Sold out'; });
@@ -44,7 +42,8 @@
     $$('[data-carousel]',root).forEach(container => {
       const track = $('[data-carousel-track]',container); if (!track || track.dataset.capabilitiesReady) return;
       track.dataset.capabilitiesReady = 'true'; track.addEventListener('scroll',() => updateCarousel(container),{ passive:true });
-      new ResizeObserver(() => updateCarousel(container)).observe(track); updateCarousel(container);
+      const observer = new ResizeObserver(() => updateCarousel(container));
+      observer.observe(track); observers.set(container, observer); updateCarousel(container);
     });
     $$('[data-before-after]',root).forEach(container => {
       const input = $('[data-comparison-range]',container); if (!input || input.dataset.capabilitiesReady) return;
@@ -57,20 +56,27 @@
       const url = new URL(`${routes}recommendations/products`,location.origin);
       url.searchParams.set('product_id',section.dataset.productId); url.searchParams.set('section_id',section.dataset.sectionId || 'product-recommendations');
       url.searchParams.set('intent',section.dataset.intent || 'related'); url.searchParams.set('limit',section.dataset.limit || '4');
-      fetch(url).then(response => response.ok ? response.text() : Promise.reject()).then(html => {
+      const controller = new AbortController(); requests.set(section, controller);
+      fetch(url, { signal: controller.signal }).then(response => response.ok ? response.text() : Promise.reject()).then(html => {
+        if (!section.isConnected) return;
         const doc = new DOMParser().parseFromString(html,'text/html'),incoming = $('[data-recommendations-grid]',doc);
         if (!incoming?.children.length) { section.hidden = true; return; }
         if (section.dataset.sectionId) { const incomingSection = $('[data-product-recommendations]',doc); section.innerHTML = incomingSection.innerHTML; section.className = incomingSection.className; }
         else $('[data-recommendations-grid]',section).innerHTML = incoming.innerHTML;
         section.hidden = false;
-      }).catch(() => { section.hidden = true; });
+      }).catch(error => { if (error?.name !== 'AbortError') section.hidden = true; }).finally(() => requests.delete(section));
     });
     $$('[data-recently-viewed]',root).forEach(section => {
       if (section.dataset.capabilitiesReady) return; section.dataset.capabilitiesReady = 'true';
       try {
         const data = JSON.parse($('[data-product-json]')?.textContent || '{}');
         const handles = JSON.parse(localStorage.getItem('nami-recent-products') || '[]').filter(handle => handle !== data.handle).slice(0,4);
-        Promise.all(handles.map(handle => fetch(`${routes}products/${encodeURIComponent(handle)}?section_id=product-card-render`).then(response => response.ok ? response.text() : '').catch(() => ''))).then(html => { const grid = $('[data-recently-viewed-grid]',section); if (grid && html.some(Boolean)) { grid.innerHTML = html.join(''); section.hidden = false; } });
+        const controller = new AbortController(); requests.set(section, controller);
+        Promise.all(handles.map(handle => fetch(`${routes}products/${encodeURIComponent(handle)}?section_id=product-card-render`, { signal: controller.signal }).then(response => response.ok ? response.text() : '').catch(() => ''))).then(html => {
+          if (!section.isConnected) return;
+          const cards = html.map(markup => $('.product-card', new DOMParser().parseFromString(markup, 'text/html'))?.outerHTML || '');
+          const grid = $('[data-recently-viewed-grid]',section); if (grid && cards.some(Boolean)) { grid.innerHTML = cards.join(''); section.hidden = false; }
+        }).finally(() => requests.delete(section));
       } catch { section.hidden = true; }
     });
   };
@@ -112,6 +118,10 @@
     }
   });
   document.addEventListener('shopify:section:load',event => init(event.target));
+  document.addEventListener('shopify:section:unload',event => {
+    for (const [container, observer] of observers) if (event.target.contains(container)) { observer.disconnect(); observers.delete(container); }
+    for (const [section, controller] of requests) if (event.target.contains(section)) { controller.abort(); requests.delete(section); }
+  });
   document.addEventListener('shopify:block:select',event => { const details = event.target.closest('details'); if (details) details.open = true; });
   init();
 })();

@@ -1,4 +1,9 @@
 /* Merchant-configurable components. No bundled demo imagery. */
+h1,h2,h3,.product-card__title,.cart-line,.rte { overflow-wrap:anywhere; }
+.cart-line { grid-template-columns:80px minmax(0,1fr) auto; }
+.cart-line > div,.section-heading > *,.header-inner > * { min-width:0; }
+.product-card__media > img { object-fit:contain; }
+.product-gallery__item model-viewer { display:block; width:100%; height:100%; }
 .align-left { text-align:left; }
 .align-center { text-align:center; }
 .align-right { text-align:right; }

@@ -6,6 +6,8 @@ This reference describes the unreleased capability-overhaul branch. Merchants su
 
 Appropriate sections expose page/full width, normal/narrow/wide content, a Shopify color scheme, and compact (24px), normal (48px), spacious (80px) or custom top/bottom spacing (0–160px). Heading scale and heading alignment appear where meaningful. Custom spacing and page-content width controls are conditional. Hero, merchandising, product media and multi-column expose deliberate mobile layout controls rather than arbitrary CSS settings.
 
+Global visual presets have limited effects: Editorial applies a 400 weight to `h1`/`h2`; Soft sets body-level radius and accent tokens, which section schemes or component rules can override. Minimal and Bold have no dedicated preset rules. These are not four complete storefront designs. Motion Minimal disables CSS animations and transitions; Subtle and Expressive currently share the default behavior. The operating system's reduced-motion preference has separate CSS handling.
+
 ## Main capabilities
 
 | Section | Purpose and layouts | Important merchant controls | Blocks |
@@ -38,9 +40,11 @@ Promo banners/grids are covered by Hero, Image with text and Bento. There is no 
 
 ## Shared commerce behavior
 
-Product cards across commerce sections use one snippet. Quick Add submits only a simple/default variant without selling plans; other products link to their PDP to choose options correctly. Swatches use Shopify option-value metadata, not a hard-coded `Color` option name. Image swatches use matching variant media when present; non-swatch data falls back to labelled buttons. Product variants are section-scoped, including invalid combinations and sold-out states.
+Product cards across commerce sections use one snippet. Quick Add submits only a simple/default variant without selling plans; other products link to their PDP. The native PDP/Featured Product form supports variant selection but does not select or submit selling plans. Subscription-only purchases fail without an app integration supplying that selection and submission; optional-plan products can only use the native one-time purchase path. Swatches use Shopify option-value metadata, not a hard-coded `Color` option name. The PDP swatch picker can use matching variant media and falls back to labelled buttons; card swatches render only where Shopify swatch metadata exists. Product variants are section-scoped, including invalid combinations and sold-out states.
 
 PDP/Featured Product blocks can be reordered because controls attach to the native product form by ID. Gallery media includes Shopify images, videos, external videos and models. Native recommendations/complementary products and recently viewed reuse the card foundation. Share uses the browser share API or clipboard where available. Page disclosures remain native accessible details, not a separate modal library.
+
+Product configurations containing only legacy Information/app blocks retain the default product information and purchase controls before those blocks. Once a composed information block is present, its configured order and omitted controls are respected. Collection app blocks remain visible independently of the selected collection's product count.
 
 Carousels use native horizontal scrolling, snapping, previous/next disabled states and a keyboard-focusable region. Tabs implement roving focus and Left/Right/Home/End. Before/after uses a keyboard/touch range; without JS the two images remain visible. FAQ uses native details with modest progressive animation, not forced height scripting. Hotspots allow one open product panel at a time.
 
@@ -54,4 +58,17 @@ Heading, text, button, image, group, quote and statistic are retained. Video, ic
 
 Missing resources in optional product/blog/gallery/logo/quote sections hide live output. Editor-only setup guidance uses `request.design_mode`. Where a surface is needed for layout, it is a restrained neutral CSS area, not enlarged Shopify line art. Defaults do not fabricate testimonials, statistics or a merchant brand. The production homepage starts with Hero, Featured collection and Newsletter, ready for merchant configuration.
 
-The complete pre-overhaul inventory and weakness audit is in [section-audit.md](section-audit.md). Template-bound sections (article/blog/cart/collection/page/search/404/collection-list) retain their native resource behavior and gain appropriate common controls. Existing Rich text, Slideshow, Split hero, Contact form, Custom Liquid, Announcement, Press mentions, Recently viewed and App area remain compatible rather than being replaced with new files.
+The complete pre-overhaul inventory and weakness audit is in [section-audit.md](section-audit.md). Template-bound sections (article/blog/cart/collection/page/search/404/collection-list) retain their native resource behavior and gain appropriate common controls. Existing section files are retained, but this does not imply automatic migration of every saved configuration.
+
+## Upgrade risks from v0.2.0
+
+- Comparison table changes from `column` blocks (`name`, `row_one_value`, `row_two_value`, `row_three_value`) and section-level row names to `row` blocks (`label`, `value_1` through `value_4`). There is no automatic migration or legacy-column renderer. Existing configurations can become invalid and their content is not read by the new renderer. Export the old configuration and recreate the comparison in an unpublished copy before upgrading.
+- Image with text replaces `reverse` with `media_position`; saved `reverse: true` does not carry over. Set the new media position explicitly.
+- Product carousel replaces `limit` with `products_to_show`; the old saved count is not read. Reapply the desired count using the existing new control.
+- Removed eyebrow fields and Featured Product's former button label are not migrated. Review saved content and merchant customizations in an unpublished copy.
+
+These risks remain release-review requirements. No legacy controls or comparison-column block are reintroduced by the hardening pass.
+
+## Verification scope
+
+The Liquid hardening checks cover image argument delivery, legacy product fallback, parent navigation links, collection app-output gates, cart property/vendor visibility and blank-content/editor handling. They do not establish live Shopify app integration or media playback. The Videographer fixture contains external YouTube media only; it does not validate Shopify-hosted video or 3D models. Actual Shopify swatch-metadata fixtures and installed third-party app output remain unverified. Subscription-only purchase support and saved comparison-table migration remain unresolved risks described above.

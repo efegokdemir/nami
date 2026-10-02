@@ -1,5 +1,5 @@
 # Section library
 
-Nami's merchant-facing library is intentionally composed of meaningful modules rather than styling fragments. The commerce set covers hero banner, split hero, slideshow, rich text, image with text, multi-column, bento grid, features, logo list, marquee, featured collection, product carousel, featured product, collection list, collection cards, lookbook hotspots, testimonials, FAQ, collapsible content, tabs, comparison table, before/after, timeline, statistics, press mentions, video, newsletter, contact, featured blog, recently viewed products, product recommendations, custom Liquid, app/theme blocks, product, collection, search, cart, blog, article, page and 404, for 44 sections in total.
+The unreleased development branch has 45 merchant-facing sections, including Image gallery, plus an internal product-card renderer. See [section capabilities](section-capabilities.md) for the current library and [upgrade risks](section-capabilities.md#upgrade-risks-from-v020) for saved configurations that require migration from v0.2.0.
 
-The reusable block set is heading, text, button, image, statistic, quote and group. The App and theme blocks section accepts both native app blocks and Nami theme blocks; the group block supports nested composition.
+The 11 reusable blocks are heading, text, button, image, statistic, quote, group, video, icon, badge and divider. The App and theme blocks section accepts both native app blocks and Nami theme blocks; the group block supports nested composition.

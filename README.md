@@ -23,12 +23,14 @@ The current development branch includes 45 merchant-facing sections and 11 reusa
 
 - Hero: full-bleed, split and contained layouts; desktop/mobile images, hosted video, positioning, overlays and two CTAs.
 - Bento: standard, wide, tall and large merchant-defined tiles using images, products, collections or concise content.
-- Merchandising: shared product cards, grid/carousel layouts, native scrolling and controls, Quick Add for simple products, Choose options for variant/subscription products, optional second images and Shopify-data swatches.
+- Merchandising: shared product cards, grid/carousel layouts, native scrolling and controls, Quick Add for simple products without selling plans, product-page links for other products, optional second images and Shopify-data swatches.
 - Product composition: reorderable information blocks, three gallery layouts, native media, dropdown/buttons/swatches, Custom Liquid, app blocks and native recommendations.
 - Content: shoppable image hotspots, keyboard tabs, before/after range slider, structured comparison tables, FAQ, galleries, testimonials, logos, video and newsletter.
 - Commerce: menu-linked mega-menu promotions, mobile navigation, predictive search, native filtering/sorting, cart drawer/page preference, order notes, optional shipping threshold, localisation and payment methods.
 
 Merchants supply their own content. No lifestyle photos, fake endorsements or curated QA-store products ship as default merchandising. Resource-dependent sections hide missing content on live pages and offer setup guidance in Theme Editor. See the [section capability reference](docs/section-capabilities.md) for controls and supported blocks.
+
+The native product form does not select or submit selling plans. Subscription-only products require an app integration that supplies the selling-plan controls and submission; a product-page link alone does not enable subscription purchases. Existing comparison tables and some saved section settings require manual migration before upgrading from v0.2.0; see [upgrade risks](docs/section-capabilities.md#upgrade-risks-from-v020).
 
 ## Quality and scope
 
