@@ -1,10 +1,10 @@
 [
-  {"name":"theme_info","theme_name":"Nami","theme_version":"0.1.0","theme_author":"Nami contributors","theme_documentation_url":"https://github.com/efegokdemir/nami","theme_support_email":"support@example.com"},
+  {"name":"theme_info","theme_name":"Nami","theme_version":"0.2.0","theme_author":"Nami contributors","theme_documentation_url":"https://github.com/efegokdemir/nami","theme_support_email":"hello@rexcode.co.uk"},
   {"name":"Brand","settings":[
     {"type":"image_picker","id":"logo","label":"Logo"},
     {"type":"range","id":"logo_width","label":"Logo width","min":80,"max":280,"step":10,"default":150,"unit":"px"},
     {"type":"select","id":"style_preset","label":"Visual preset","options":[{"value":"minimal","label":"Minimal"},{"value":"editorial","label":"Editorial"},{"value":"soft","label":"Soft"},{"value":"bold","label":"Bold"}],"default":"minimal"},
-    {"type":"font_picker","id":"heading_font","label":"Heading font","default":"assistant_n4"},
+    {"type":"font_picker","id":"heading_font","label":"Heading font","default":"assistant_n6"},
     {"type":"font_picker","id":"body_font","label":"Body font","default":"assistant_n4"},
     {"type":"range","id":"page_width","label":"Page width","min":1000,"max":1600,"step":20,"default":1280,"unit":"px"},
     {"type":"range","id":"section_spacing","label":"Section spacing","min":24,"max":140,"step":4,"default":72,"unit":"px"},
