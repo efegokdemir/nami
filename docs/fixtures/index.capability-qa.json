@@ -1,0 +1,398 @@
+{
+  "sections": {
+    "split": {
+      "type": "hero-banner",
+      "settings": {
+        "heading": "Capability QA: split hero with a long heading to test wrapping and layout",
+        "image": "shopify://shop_images/snowboard_wax.jpg",
+        "layout": "split",
+        "height": 400,
+        "button_label": "Catalog",
+        "button_link": "/collections/all"
+      }
+    },
+    "bleed": {
+      "type": "hero-banner",
+      "settings": {
+        "heading": "Full bleed hero",
+        "image": "shopify://shop_images/gift_card.jpg",
+        "layout": "overlay",
+        "height": 400,
+        "overlay_enabled": true,
+        "overlay": 60,
+        "color_scheme": "scheme-3",
+        "alignment": "center"
+      }
+    },
+    "left": {
+      "type": "image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/snowboard_wax.jpg",
+        "heading": "Image left",
+        "media_position": "left",
+        "media_width": 60,
+        "image_ratio": "portrait"
+      },
+      "blocks": {
+        "block0": {
+          "type": "heading",
+          "settings": {
+            "heading": "Image left with reorderable content"
+          }
+        },
+        "block1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>QA content for width and long text behavior.</p>"
+          }
+        },
+        "block2": {
+          "type": "button",
+          "settings": {
+            "button_label": "Catalog",
+            "button_link": "/collections/all",
+            "style": "secondary"
+          }
+        }
+      },
+      "block_order": [
+        "block0",
+        "block1",
+        "block2"
+      ]
+    },
+    "right": {
+      "type": "image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/gift_card.jpg",
+        "heading": "Image right",
+        "media_position": "right",
+        "media_width": 40,
+        "image_ratio": "landscape",
+        "layout": "overlap"
+      }
+    },
+    "grid": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Grid: existing QA catalog",
+        "collection": "all",
+        "products_to_show": 4,
+        "desktop_columns": 4,
+        "mobile_columns": "2",
+        "show_quick_add": true,
+        "show_swatches": true
+      }
+    },
+    "carousel": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Carousel: existing QA catalog",
+        "collection": "all",
+        "layout": "carousel",
+        "products_to_show": 8,
+        "desktop_columns": 4,
+        "mobile_columns": "2"
+      }
+    },
+    "bento": {
+      "type": "bento-grid",
+      "settings": {
+        "heading": "Mixed Bento sizes",
+        "columns": 3
+      },
+      "blocks": {
+        "block0": {
+          "type": "tile",
+          "settings": {
+            "size": "large",
+            "product": "selling-plans-ski-wax"
+          }
+        },
+        "block1": {
+          "type": "tile",
+          "settings": {
+            "size": "standard",
+            "product": "the-collection-snowboard-hydrogen"
+          }
+        },
+        "block2": {
+          "type": "tile",
+          "settings": {
+            "size": "tall",
+            "image": "shopify://shop_images/gift_card.jpg",
+            "heading": "Tall tile",
+            "presentation": "overlay",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "block3": {
+          "type": "tile",
+          "settings": {
+            "size": "wide",
+            "image": "shopify://shop_images/snowboard_wax.jpg",
+            "heading": "Wide tile"
+          }
+        }
+      },
+      "block_order": [
+        "block0",
+        "block1",
+        "block2",
+        "block3"
+      ]
+    },
+    "columns": {
+      "type": "multi-column",
+      "settings": {
+        "heading": "Three columns",
+        "desktop_columns": 3,
+        "mobile_columns": "1"
+      },
+      "blocks": {
+        "block0": {
+          "type": "column",
+          "settings": {
+            "icon": "shipping",
+            "heading": "shipping",
+            "text": "<p>QA item content.</p>"
+          }
+        },
+        "block1": {
+          "type": "column",
+          "settings": {
+            "icon": "return",
+            "heading": "return",
+            "text": "<p>QA item content.</p>"
+          }
+        },
+        "block2": {
+          "type": "column",
+          "settings": {
+            "icon": "support",
+            "heading": "support",
+            "text": "<p>QA item content.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "block0",
+        "block1",
+        "block2"
+      ]
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "heading": "Long answers and multiple disclosures",
+        "single_open": true,
+        "expanded_first": true
+      },
+      "blocks": {
+        "block0": {
+          "type": "question",
+          "settings": {
+            "question": "Long answer test",
+            "answer": "<p>This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. This is test content used to verify wrapping and accordion height. </p>"
+          }
+        },
+        "block1": {
+          "type": "question",
+          "settings": {
+            "question": "Second question",
+            "answer": "<p>Second answer.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "block0",
+        "block1"
+      ]
+    },
+    "lookbook": {
+      "type": "lookbook",
+      "settings": {
+        "heading": "Two product hotspots",
+        "image": "shopify://shop_images/snowboard_wax.jpg"
+      },
+      "blocks": {
+        "block0": {
+          "type": "hotspot",
+          "settings": {
+            "product": "selling-plans-ski-wax",
+            "left": 20,
+            "top": 40
+          }
+        },
+        "block1": {
+          "type": "hotspot",
+          "settings": {
+            "product": "the-collection-snowboard-hydrogen",
+            "left": 90,
+            "top": 60
+          }
+        }
+      },
+      "block_order": [
+        "block0",
+        "block1"
+      ]
+    },
+    "spotlight": {
+      "type": "featured-product",
+      "settings": {
+        "product": "selling-plans-ski-wax",
+        "gallery_layout": "carousel",
+        "media_width": 55
+      },
+      "blocks": {
+        "block0": {
+          "type": "title"
+        },
+        "block1": {
+          "type": "price"
+        },
+        "block2": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_style": "buttons"
+          }
+        },
+        "block3": {
+          "type": "quantity"
+        },
+        "block4": {
+          "type": "buy_buttons",
+          "settings": {
+            "dynamic_checkout": false
+          }
+        },
+        "block5": {
+          "type": "sku"
+        },
+        "block6": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<p>Custom Liquid QA block</p>"
+          }
+        }
+      },
+      "block_order": [
+        "block0",
+        "block1",
+        "block2",
+        "block3",
+        "block4",
+        "block5",
+        "block6"
+      ]
+    },
+    "compare": {
+      "type": "before-after",
+      "settings": {
+        "heading": "Before/after slider",
+        "before_image": "shopify://shop_images/snowboard_wax.jpg",
+        "after_image": "shopify://shop_images/gift_card.jpg"
+      }
+    },
+    "tabs": {
+      "type": "tabs",
+      "settings": {
+        "heading": "Keyboard tabs"
+      },
+      "blocks": {
+        "block0": {
+          "type": "tab",
+          "settings": {
+            "heading": "First",
+            "content": "<p>First panel.</p>"
+          }
+        },
+        "block1": {
+          "type": "tab",
+          "settings": {
+            "heading": "Second",
+            "content": "<p>Second panel.</p>"
+          }
+        },
+        "block2": {
+          "type": "tab",
+          "settings": {
+            "heading": "Third",
+            "custom_liquid": "<p>Third Liquid panel.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "block0",
+        "block1",
+        "block2"
+      ]
+    },
+    "table": {
+      "type": "comparison-table",
+      "settings": {
+        "heading": "Four-column comparison",
+        "columns": 4,
+        "column_1": "One",
+        "column_2": "Two",
+        "column_3": "Three",
+        "column_4": "Four"
+      },
+      "blocks": {
+        "block0": {
+          "type": "row",
+          "settings": {
+            "label": "Feature",
+            "value_1": "yes",
+            "value_2": "no",
+            "value_3": "Text value",
+            "value_4": "yes"
+          }
+        },
+        "block1": {
+          "type": "row",
+          "settings": {
+            "label": "Second feature",
+            "value_1": "Detail",
+            "value_2": "yes",
+            "value_3": "no",
+            "value_4": "Detail"
+          }
+        }
+      },
+      "block_order": [
+        "block0",
+        "block1"
+      ]
+    },
+    "emptyblog": {
+      "type": "featured-blog",
+      "settings": {
+        "heading": "This empty blog must hide live"
+      }
+    },
+    "emptyproduct": {
+      "type": "featured-product",
+      "settings": {}
+    }
+  },
+  "order": [
+    "split",
+    "bleed",
+    "left",
+    "right",
+    "grid",
+    "carousel",
+    "bento",
+    "columns",
+    "faq",
+    "lookbook",
+    "spotlight",
+    "compare",
+    "tabs",
+    "table",
+    "emptyblog",
+    "emptyproduct"
+  ]
+}

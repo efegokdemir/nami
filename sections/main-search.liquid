@@ -1,2 +1,247 @@
-<section class="section"><div class="page-width"><div class="section-heading"><div><p class="eyebrow">Search</p><h1>Find your next favorite.</h1></div></div><form action="{{ routes.search_url }}" method="get" role="search"><label class="visually-hidden" for="SearchInput">{{ 'general.search.search' | t }}</label><input class="search-input" id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}"></form>{% if search.performed %}{% if search.results_count > 0 %}<div class="grid grid--products" style="margin-top:2rem">{% for item in search.results %}{% if item.object_type == 'product' %}{% render 'product-card', product: item %}{% else %}<article class="card"><p class="eyebrow">{{ item.object_type }}</p><h2><a href="{{ item.url }}">{{ item.title }}</a></h2></article>{% endif %}{% endfor %}</div>{% else %}<div class="card" style="margin-top:2rem"><p>{{ 'general.search.no_results' | t }}</p></div>{% endif %}{% endif %}</div></section>
-{% schema %}{"name":"Search results","settings":[],"presets":[{"name":"Search results"}]}{% endschema %}
+{% render 'section-style', section: section %}
+<section class="section"><div class="page-width"><div class="section-heading"><div><p class="eyebrow">Search</p><h1>Find your next favorite.</h1></div></div><form action="{{ routes.search_url }}" method="get" role="search"><label class="visually-hidden" for="SearchInput">{{ 'general.search.search' | t }}</label><input class="search-input" id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}"></form>{% if search.performed %}{% if search.results_count > 0 %}<div class="grid grid--products" style="margin-top:2rem">{% for item in search.results %}{% if item.object_type == 'product' %}{% render 'product-card', product: item, show_vendor: section.settings.show_vendor, show_price: section.settings.show_price, show_badges: section.settings.show_badges, show_second_image: section.settings.show_second_image, show_quick_add: section.settings.show_quick_add, show_swatches: section.settings.show_swatches, image_ratio: section.settings.image_ratio, card_style: section.settings.card_style, card_alignment: section.settings.card_alignment %}{% else %}<article class="card"><p class="eyebrow">{{ item.object_type }}</p><h2><a href="{{ item.url }}">{{ item.title }}</a></h2></article>{% endif %}{% endfor %}</div>{% else %}<div class="card" style="margin-top:2rem"><p>{{ 'general.search.no_results' | t }}</p></div>{% endif %}{% endif %}</div></section>
+{% schema %}
+{
+  "name": "Search results",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page",
+          "label": "Page width"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.section_width == 'page' }}"
+    },
+    {
+      "type": "select",
+      "id": "section_alignment",
+      "label": "Section alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Spacing",
+      "options": [
+        {
+          "value": "compact",
+          "label": "Compact"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "spacious",
+          "label": "Spacious"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Custom top spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Custom bottom spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show price",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show badges",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_second_image",
+      "label": "Show second image on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show Quick Add",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_swatches",
+      "label": "Show option swatches",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image proportions",
+      "options": [
+        {
+          "value": "natural",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape"
+        }
+      ],
+      "default": "square"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Card style",
+      "options": [
+        {
+          "value": "plain",
+          "label": "Plain"
+        },
+        {
+          "value": "surface",
+          "label": "Surface"
+        }
+      ],
+      "default": "plain"
+    },
+    {
+      "type": "select",
+      "id": "card_alignment",
+      "label": "Card text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Search results"
+    }
+  ]
+}
+{% endschema %}

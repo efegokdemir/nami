@@ -1,1 +1,49 @@
-{"sections":{"main":{"type":"main-product"},"recommendations":{"type":"product-recommendations"}},"order":["main","recommendations"]}
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "gallery_layout": "thumbnails"
+      },
+      "blocks": {
+        "info0": {
+          "type": "vendor"
+        },
+        "info1": {
+          "type": "title"
+        },
+        "info2": {
+          "type": "price"
+        },
+        "info3": {
+          "type": "description"
+        },
+        "info4": {
+          "type": "variant_picker"
+        },
+        "info5": {
+          "type": "quantity"
+        },
+        "info6": {
+          "type": "buy_buttons"
+        }
+      },
+      "block_order": [
+        "info0",
+        "info1",
+        "info2",
+        "info3",
+        "info4",
+        "info5",
+        "info6"
+      ]
+    },
+    "recommendations": {
+      "type": "product-recommendations"
+    }
+  },
+  "order": [
+    "main",
+    "recommendations"
+  ]
+}

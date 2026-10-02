@@ -1,2 +1,194 @@
-<section class="marquee color-{{ section.settings.color_scheme }}" aria-label="{{ section.settings.text }}"><div class="marquee__track">{% for i in (1..4) %}<span>{{ section.settings.text }}</span><span aria-hidden="true">✦</span>{% endfor %}</div></section>
-{% schema %}{"name":"Marquee","settings":[{"type":"text","id":"text","label":"Text","default":"Made for the everyday"},{"type":"color_scheme","id":"color_scheme","label":"Color scheme","default":"scheme-2"}],"presets":[{"name":"Marquee"}]}{% endschema %}
+{% render 'section-style', section: section %}
+{% if section.blocks.size > 0 or section.settings.text != blank %}<section class="section color-{{ section.settings.color_scheme }}"><div class="capability-marquee{% if section.settings.pause_hover %} pause-hover{% endif %}" style="--marquee-speed:{{ section.settings.speed }}s;--marquee-direction:{{ section.settings.direction }}"><div class="capability-marquee__track">{% for copy in (1..2) %}<div class="capability-marquee__group"{% if copy == 2 %} aria-hidden="true" inert{% endif %}>{% if section.blocks.size > 0 %}{% for block in section.blocks %}<span{% if copy == 1 %} {{ block.shopify_attributes }}{% endif %}>{% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{% endif %}{% render 'icon', name: block.settings.icon %}{{ block.settings.text | escape }}{% if block.settings.link != blank %}</a>{% endif %}</span>{% endfor %}{% else %}<span>{{ section.settings.text | escape }}</span>{% endif %}</div>{% endfor %}</div></div></section>{% endif %}
+{% schema %}
+{
+  "name": "Marquee",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Legacy text"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Seconds per cycle",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "default": 30,
+      "unit": "s"
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Left"
+        },
+        {
+          "value": "reverse",
+          "label": "Right"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_hover",
+      "label": "Pause on hover",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page",
+          "label": "Page width"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.section_width == 'page' }}"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Spacing",
+      "options": [
+        {
+          "value": "compact",
+          "label": "Compact"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "spacious",
+          "label": "Spacious"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Custom top spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Custom bottom spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "check",
+              "label": "Check"
+            },
+            {
+              "value": "shipping",
+              "label": "Delivery"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee",
+      "blocks": [
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

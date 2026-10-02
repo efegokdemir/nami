@@ -8,6 +8,7 @@
     {{ content_for_header }}
     {{ 'nami-theme.css' | asset_url | stylesheet_tag }}
     {{ 'nami-overhaul.css' | asset_url | stylesheet_tag }}
+    {{ 'nami-capabilities.css' | asset_url | stylesheet_tag }}
     <style>
       :root {
         --page-width: {{ settings.page_width }}px;
@@ -19,11 +20,22 @@
         --font-body-weight: {{ settings.body_font.weight | default: 400 }};
         --heading: var(--font-heading);
         --body: var(--font-body);
+        --page-bg: {{ settings.background_color | default: '#FAFAF8' }};
+        --surface: {{ settings.surface_color | default: '#FFFFFF' }};
+        --surface-soft: {{ settings.soft_color | default: '#F1F1ED' }};
+        --text: {{ settings.text_color | default: '#151615' }};
+        --muted: {{ settings.muted_color | default: '#686966' }};
+        --border: {{ settings.border_color | default: '#E2E2DD' }};
+        --accent: {{ settings.accent_color | default: '#263B34' }};
+        --accent-contrast: {{ settings.accent_text_color | default: '#FFFFFF' }};
       }
+      {% for scheme in settings.color_schemes %}
+        .color-{{ scheme.id }} { --page-bg: {{ scheme.settings.background }}; --text: {{ scheme.settings.text }}; --accent: {{ scheme.settings.button }}; --accent-contrast: {{ scheme.settings.button_label }}; --muted:color-mix(in srgb,var(--text) 72%,var(--page-bg)); --surface-soft:color-mix(in srgb,var(--page-bg) 92%,var(--text)); --border:color-mix(in srgb,var(--text) 18%,var(--page-bg)); background: {{ scheme.settings.background_gradient | default: scheme.settings.background }}; color: var(--text); }
+      {% endfor %}
       {{ settings.heading_font | font_face: font_display: 'swap' }}{{ settings.body_font | font_face: font_display: 'swap' }}
     </style>
   </head>
-  <body class="preset-{{ settings.style_preset }} radius-{{ settings.radius }} motion-{{ settings.motion }}">
+  <body class="template-{{ template.name }} preset-{{ settings.style_preset }} radius-{{ settings.radius }} motion-{{ settings.motion }}" data-cart-type="{{ settings.cart_type | default: 'drawer' }}" data-cart-vendor="{{ settings.cart_vendor }}" data-cart-properties="{{ settings.cart_properties }}" data-shipping-threshold="{{ settings.free_shipping_threshold | default: 0 | times: 100 }}">
     <a class="skip-link" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
     {% sections 'header-group' %}
     <main id="MainContent" role="main">{{ content_for_layout }}</main>
@@ -32,5 +44,6 @@
     {% render 'cart-drawer' %}
     <script>window.namiMoneyFormat={{ shop.money_format | json }};window.namiEmptyLabel={{ 'cart.general.empty' | t | json }};window.namiRemoveLabel={{ 'cart.general.remove' | t | json }};window.namiAddLabel={{ 'products.product.add_to_cart' | t | json }};window.namiSoldOutLabel={{ 'products.product.sold_out' | t | json }};window.namiNoResultsLabel={{ 'general.search.no_results' | t | json }};</script>
     <script src="{{ 'nami.js' | asset_url }}" defer></script>
+    <script src="{{ 'nami-capabilities.js' | asset_url }}" defer></script>
   </body>
 </html>

@@ -1,3 +1,4 @@
 {% if image != blank %}
-  {{ image | image_url: width: width | image_tag: widths: '320,480,640,800,1000,1200,1600', sizes: sizes, loading: loading, fetchpriority: fetchpriority, class: class, alt: image.alt | escape }}
-{% else %}<div class="media-placeholder" aria-hidden="true">{{ 'lifestyle-1' | placeholder_svg_tag }}</div>{% endif %}
+  {% assign image_width = width | default: 1200 %}
+  {{ image | image_url: width: image_width | image_tag: widths: '320,480,750,1000,1200,1600', sizes: sizes | default: '100vw', loading: loading | default: 'lazy', fetchpriority: fetchpriority | default: 'auto', class: class, alt: image.alt }}
+{% else %}<div class="media-empty" aria-hidden="true">{% if request.design_mode %}<span class="media-empty__hint">Add an image</span>{% endif %}</div>{% endif %}

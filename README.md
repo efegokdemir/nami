@@ -15,11 +15,20 @@ shopify theme dev --path nami
 shopify theme check --path nami
 ```
 
-Nami uses Shopify's native Online Store architecture: JSON templates, section groups, sections, snippets, app blocks, Liquid forms and the Ajax Cart API. JavaScript is small vanilla enhancement code in `assets/nami.js`; CSS tokens and components live in `assets/nami.css.liquid`.
+Nami uses Shopify's native Online Store architecture: JSON templates, section groups, sections, snippets, app blocks, Liquid forms and the Ajax Cart API. Vanilla enhancements live in `assets/nami.js` and `assets/nami-capabilities.js`; tokens, components and responsive layouts live in the theme CSS assets. No build step is required.
 
 ## Included experiences
 
-Nami includes 44 merchant-facing sections, 7 reusable theme blocks, and templates for home, product, collection, collection list, search, cart, blog, article, page, contact and 404. Commerce features include accessible navigation, predictive search, native filters and sorting, variant-aware product forms, accelerated checkout, cart drawer, cart page, recommendations, recently viewed products, responsive imagery, translation-ready strings, app insertion points and visual presets.
+The current development branch includes 45 merchant-facing sections and 11 reusable theme blocks, plus an internal product-card renderer. Templates cover home, product, collection, collection list, search, cart, blog, article, page, contact and 404. Previous release ZIPs remain unchanged; this capability overhaul is not yet released.
+
+- Hero: full-bleed, split and contained layouts; desktop/mobile images, hosted video, positioning, overlays and two CTAs.
+- Bento: standard, wide, tall and large merchant-defined tiles using images, products, collections or concise content.
+- Merchandising: shared product cards, grid/carousel layouts, native scrolling and controls, Quick Add for simple products, Choose options for variant/subscription products, optional second images and Shopify-data swatches.
+- Product composition: reorderable information blocks, three gallery layouts, native media, dropdown/buttons/swatches, Custom Liquid, app blocks and native recommendations.
+- Content: shoppable image hotspots, keyboard tabs, before/after range slider, structured comparison tables, FAQ, galleries, testimonials, logos, video and newsletter.
+- Commerce: menu-linked mega-menu promotions, mobile navigation, predictive search, native filtering/sorting, cart drawer/page preference, order notes, optional shipping threshold, localisation and payment methods.
+
+Merchants supply their own content. No lifestyle photos, fake endorsements or curated QA-store products ship as default merchandising. Resource-dependent sections hide missing content on live pages and offer setup guidance in Theme Editor. See the [section capability reference](docs/section-capabilities.md) for controls and supported blocks.
 
 ## Quality and scope
 

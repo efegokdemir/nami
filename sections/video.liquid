@@ -1,2 +1,194 @@
-<section class="section"><div class="page-width"><div class="section-heading"><h2>{{ section.settings.heading }}</h2></div>{% if section.settings.video != blank %}{{ section.settings.video | video_tag: image_size: '1400x', controls: true, autoplay: false, loop: false, muted: false }}{% elsif section.settings.cover != blank %}{{ section.settings.cover | image_url: width: 1600 | image_tag: widths: '640,1000,1600', sizes: '100vw', alt: section.settings.heading }}{% else %}<div class="card">Add a video or cover image.</div>{% endif %}</div></section>
-{% schema %}{"name":"Video","settings":[{"type":"text","id":"heading","label":"Heading","default":"A closer look"},{"type":"video","id":"video","label":"Shopify-hosted video"},{"type":"image_picker","id":"cover","label":"Fallback cover image"}],"presets":[{"name":"Video"}]}{% endschema %}
+{% render 'section-style', section: section %}
+{% if section.settings.video != blank or section.settings.video_url != blank or section.settings.cover != blank or request.design_mode %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width video-layout layout-{{ section.settings.layout }}"><div><h2>{{ section.settings.heading | escape }}</h2>{{ section.settings.text }}</div><div class="video-media">{% if section.settings.video != blank %}{% assign poster = blank %}{% if section.settings.cover != blank %}{% assign poster = section.settings.cover | image_url: width: 1400 %}{% endif %}{{ section.settings.video | video_tag: poster: poster, image_size: '1400x', controls: section.settings.controls, autoplay: section.settings.autoplay, loop: section.settings.loop, muted: section.settings.autoplay }}{% elsif section.settings.video_url != blank %}{% if section.settings.video_url.type == 'youtube' %}<iframe src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}" title="{{ section.settings.heading | escape }}" loading="lazy" allow="fullscreen" allowfullscreen></iframe>{% else %}<iframe src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}" title="{{ section.settings.heading | escape }}" loading="lazy" allow="fullscreen" allowfullscreen></iframe>{% endif %}{% elsif section.settings.cover != blank %}{% render 'image', image: section.settings.cover, width: 1600 %}{% elsif request.design_mode %}<p class="editor-help">Select a video or cover image.</p>{% endif %}</div></div></section>{% endif %}
+{% schema %}
+{
+  "name": "Video",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Shopify-hosted video"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "External video",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "cover",
+      "label": "Poster or fallback image"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay hosted video (muted)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "Show video controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop hosted video",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Content placement",
+      "options": [
+        {
+          "value": "above",
+          "label": "Above video"
+        },
+        {
+          "value": "adjacent",
+          "label": "Beside video"
+        }
+      ],
+      "default": "above"
+    },
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page",
+          "label": "Page width"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.section_width == 'page' }}"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Spacing",
+      "options": [
+        {
+          "value": "compact",
+          "label": "Compact"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "spacious",
+          "label": "Spacious"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Custom top spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Custom bottom spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ]
+}
+{% endschema %}

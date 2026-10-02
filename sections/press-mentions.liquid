@@ -1,2 +1,152 @@
+{% assign meaningful_blocks = 0 %}{% for block in section.blocks %}{% if block.settings.quote != blank and block.settings.publication != blank %}{% assign meaningful_blocks = meaningful_blocks | plus: 1 %}{% endif %}{% endfor %}{% if meaningful_blocks > 0 or request.design_mode %}
+{% render 'section-style', section: section %}
 <section class="section section--tight"><div class="page-width"><p class="eyebrow">{{ section.settings.heading }}</p><div class="press-list">{% for block in section.blocks %}<a href="{{ block.settings.link }}" {{ block.shopify_attributes }}><span>{{ block.settings.publication }}</span><strong>{{ block.settings.quote }}</strong></a>{% endfor %}</div></div></section>
-{% schema %}{"name":"Press mentions","max_blocks":8,"settings":[{"type":"text","id":"heading","label":"Heading","default":"As seen in"}],"blocks":[{"type":"mention","name":"Mention","settings":[{"type":"text","id":"publication","label":"Publication","default":"Publication"},{"type":"text","id":"quote","label":"Mention","default":"A considered favorite."},{"type":"url","id":"link","label":"Link"}]}],"presets":[{"name":"Press mentions","blocks":[{"type":"mention"},{"type":"mention"}]}]}{% endschema %}
+
+{% endif %}
+{% schema %}
+{
+  "name": "Press mentions",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "As seen in"
+    },
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page",
+          "label": "Page width"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.section_width == 'page' }}"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Spacing",
+      "options": [
+        {
+          "value": "compact",
+          "label": "Compact"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "spacious",
+          "label": "Spacious"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Custom top spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Custom bottom spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mention",
+      "name": "Mention",
+      "settings": [
+        {
+          "type": "text",
+          "id": "publication",
+          "label": "Publication"
+        },
+        {
+          "type": "text",
+          "id": "quote",
+          "label": "Mention"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Press mentions",
+      "blocks": [
+        {
+          "type": "mention"
+        },
+        {
+          "type": "mention"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

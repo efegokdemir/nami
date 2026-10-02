@@ -1,2 +1,85 @@
-<div class="theme-block theme-block--group" {{ block.shopify_attributes }}>{% content_for 'blocks' %}</div>
-{% schema %}{"name":"Group","blocks":[{"type":"@theme"},{"type":"@app"}],"presets":[{"name":"Group","blocks":[{"type":"heading"},{"type":"text"}]}]}{% endschema %}
+<div class="theme-block theme-block--group group-{{ block.settings.direction }} group-align-{{ block.settings.alignment }} group-space-{{ block.settings.space }}" {{ block.shopify_attributes }}>{% content_for 'blocks' %}</div>
+{% schema %}
+{
+  "name": "Group",
+  "blocks": [
+    {
+      "type": "@theme"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Group",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Desktop direction",
+      "options": [
+        {
+          "value": "column",
+          "label": "Column"
+        },
+        {
+          "value": "row",
+          "label": "Row"
+        }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Content alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "End"
+        }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "space",
+      "label": "Space between items",
+      "options": [
+        {
+          "value": "compact",
+          "label": "Compact"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "spacious",
+          "label": "Spacious"
+        }
+      ],
+      "default": "compact"
+    }
+  ]
+}
+{% endschema %}

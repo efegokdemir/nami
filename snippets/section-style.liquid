@@ -1,0 +1,36 @@
+{% liquid
+assign section_space = 48
+if section.settings.spacing == 'compact'
+assign section_space = 24
+elsif section.settings.spacing == 'spacious'
+assign section_space = 80
+endif
+assign top = section_space
+assign bottom = section_space
+if section.settings.spacing == 'custom'
+assign top = section.settings.padding_top
+assign bottom = section.settings.padding_bottom
+endif
+assign content_width = 'var(--page-width,1280px)'
+if section.settings.content_width == 'narrow'
+assign content_width = '880px'
+elsif section.settings.content_width == 'wide'
+assign content_width = '1600px'
+endif
+assign heading_size = 'clamp(25px,2.6vw,34px)'
+assign scheme = settings.color_schemes[section.settings.color_scheme]
+if section.settings.heading_size == 'small'
+assign heading_size = '24px'
+elsif section.settings.heading_size == 'large'
+assign heading_size = 'clamp(30px,4vw,48px)'
+endif
+%}<style>
+#shopify-section-{{ section.id }} > .section { padding-top:{{ top }}px; padding-bottom:{{ bottom }}px;{% if scheme != blank %} --page-bg:{{ scheme.settings.background }}; --text:{{ scheme.settings.text }}; --accent:{{ scheme.settings.button }}; --accent-contrast:{{ scheme.settings.button_label }}; --muted:color-mix(in srgb,var(--text) 72%,var(--page-bg)); --surface-soft:color-mix(in srgb,var(--page-bg) 92%,var(--text)); --border:color-mix(in srgb,var(--text) 18%,var(--page-bg)); background:{{ scheme.settings.background_gradient | default: scheme.settings.background }}; color:var(--text);{% endif %} }
+#shopify-section-{{ section.id }} > .section > .page-width { {% if section.settings.section_width == 'full' %} max-width:none; width:100%; padding-inline:20px;{% else %} max-width:{{ content_width }};{% endif %} }
+#shopify-section-{{ section.id }} .section-heading { text-align:{{ section.settings.section_alignment | default: 'left' }}; }
+#shopify-section-{{ section.id }} .section-heading :is(h1,h2), #shopify-section-{{ section.id }} .image-text__content h2, #shopify-section-{{ section.id }} .rich-text h2, #shopify-section-{{ section.id }} > .section > .page-width > :is(h1,h2), #shopify-section-{{ section.id }} .video-layout > div > h2 { font-size:{{ heading_size }}; }
+#shopify-section-{{ section.id }} .capability-hero__content :is(h1,h2) { font-size:{% case section.settings.heading_size %}{% when 'small' %}clamp(28px,3vw,40px){% when 'large' %}clamp(36px,5vw,72px){% else %}clamp(32px,4vw,56px){% endcase %}; }
+{% if section.type == 'hero-banner' and section.settings.layout == 'overlay' %}
+#shopify-section-{{ section.id }} .capability-hero--overlay > .page-width { max-width:none; width:100%; padding-inline:max(20px,calc((100vw - var(--page-width))/2)); }
+{% endif %}
+</style>

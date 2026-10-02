@@ -1,17 +1,18 @@
 {
   "sections": {
-    "hero": {"type":"hero-banner","settings":{"eyebrow":"New season","heading":"Better basics for everyday life.","text":"Thoughtful objects, considered materials and room to make them yours.","button_label":"Shop the collection","button_link":"/collections/all","overlay":25}},
-    "collections": {"type":"collection-grid","settings":{"eyebrow":"Find your starting point","heading":"Shop by intention","text":"A few considered places to begin."},"blocks":{"new":{"type":"collection","settings":{"eyebrow":"01 / New","label":"New arrivals","description":"Fresh ideas for the everyday.","icon":"01"}},"home":{"type":"collection","settings":{"eyebrow":"02 / Home","label":"The home edit","description":"Useful objects, chosen well.","icon":"02"}},"daily":{"type":"collection","settings":{"eyebrow":"03 / Daily","label":"Small rituals","description":"Simple things that make a difference.","icon":"03"}}},"block_order":["new","home","daily"]},
-    "featured": {"type":"featured-collection","settings":{"eyebrow":"Selected for you","heading":"New arrivals","collection":"all","products_to_show":4,"link_label":"View all"}},
-    "story": {"type":"image-with-text","settings":{"eyebrow":"Designed for real life","heading":"Good design should make the day feel easier.","text":"<p>Nami gives your products space to speak clearly, with flexible layouts that stay useful as your store grows.</p>","button_label":"Our approach","button_link":"/pages/about","color_scheme":"scheme-2"}},
-    "bento": {"type":"bento-grid","settings":{"heading":"Built around better essentials."},"blocks":{"one":{"type":"tile","settings":{"size":"wide","eyebrow":"Materials","heading":"Less noise. More intention.","text":"Create a clear point of view around the things you choose to sell."}},"two":{"type":"tile","settings":{"size":"standard","eyebrow":"Details","heading":"Made to be noticed.","text":"Small details can carry the whole story."}},"three":{"type":"tile","settings":{"size":"standard","eyebrow":"Everyday","heading":"Useful by design.","text":"A calm foundation for products people live with."}}},"block_order":["one","two","three"]},
-    "carousel": {"type":"product-carousel","settings":{"heading":"Worth a closer look","collection":"all","limit":5,"link_label":"View all"}},
-    "features": {"type":"features","settings":{"eyebrow":"The Nami approach","heading":"Simple, by design.","color_scheme":"scheme-1"},"blocks":{"clarity":{"type":"feature","settings":{"icon":"01","heading":"Clarity","text":"<p>Give every product and message room to breathe.</p>"}},"flexibility":{"type":"feature","settings":{"icon":"02","heading":"Flexibility","text":"<p>Shape the storefront around your own point of view.</p>"}},"comfort":{"type":"feature","settings":{"icon":"03","heading":"Comfort","text":"<p>Make browsing feel easy across every screen.</p>"}}},"block_order":["clarity","flexibility","comfort"]},
-    "point-of-view": {"type":"multi-column","settings":{"eyebrow":"A considered system","heading":"Everything has a place.","color_scheme":"scheme-4"},"blocks":{"browse":{"type":"column","settings":{"number":"01","heading":"Browse","text":"<p>Guide people from first impression to product with a clear visual rhythm.</p>"}},"choose":{"type":"column","settings":{"number":"02","heading":"Choose","text":"<p>Make options, details and decisions feel straightforward.</p>"}},"return":{"type":"column","settings":{"number":"03","heading":"Return","text":"<p>Give customers a reason to come back to the story.</p>"}}},"block_order":["browse","choose","return"]},
-    "logos": {"type":"logo-list","settings":{"heading":"A flexible starting point"},"blocks":{"one":{"type":"logo","settings":{"text":"Fashion","alt":"Fashion"}},"two":{"type":"logo","settings":{"text":"Home","alt":"Home"}},"three":{"type":"logo","settings":{"text":"Beauty","alt":"Beauty"}},"four":{"type":"logo","settings":{"text":"Lifestyle","alt":"Lifestyle"}}},"block_order":["one","two","three","four"]},
-    "journal": {"type":"featured-blog","settings":{"heading":"From the journal","limit":3,"link_label":"View all"}},
-    "faq": {"type":"faq","settings":{"eyebrow":"Good to know","heading":"Questions, answered."},"blocks":{"one":{"type":"question","settings":{"question":"What makes Nami different?","answer":"<p>A flexible, product-focused foundation that stays calm and clear as your store grows.</p>"}},"two":{"type":"question","settings":{"question":"Can I make it feel like my brand?","answer":"<p>Yes. Start with the visual presets, type controls and flexible sections, then make the details your own.</p>"}}},"block_order":["one","two"]},
-    "newsletter": {"type":"newsletter","settings":{"eyebrow":"Stay in the loop","heading":"Good things, occasionally.","placeholder":"Email address","button_label":"Subscribe"}}
+    "hero": {
+      "type": "hero-banner"
+    },
+    "featured": {
+      "type": "featured-collection"
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
   },
-  "order":["hero","collections","featured","story","bento","carousel","features","point-of-view","logos","journal","faq","newsletter"]
+  "order": [
+    "hero",
+    "featured",
+    "newsletter"
+  ]
 }

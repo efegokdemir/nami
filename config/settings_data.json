@@ -1,1 +1,46 @@
-{"current":{"settings":{"style_preset":"minimal","logo_width":150,"page_width":1280,"section_spacing":72,"radius":"soft","motion":"subtle"}}}
+{
+  "current": {
+    "style_preset": "minimal",
+    "logo_width": 150,
+    "page_width": 1280,
+    "section_spacing": 56,
+    "radius": "soft",
+    "motion": "subtle",
+    "heading_font": "assistant_n6",
+    "body_font": "assistant_n4",
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background": "#FAFAF8",
+          "text": "#151615",
+          "button": "#263B34",
+          "button_label": "#FFFFFF"
+        }
+      },
+      "scheme-2": {
+        "settings": {
+          "background": "#F1F1ED",
+          "text": "#151615",
+          "button": "#263B34",
+          "button_label": "#FFFFFF"
+        }
+      },
+      "scheme-3": {
+        "settings": {
+          "background": "#151615",
+          "text": "#FAFAF8",
+          "button": "#FAFAF8",
+          "button_label": "#151615"
+        }
+      },
+      "scheme-4": {
+        "settings": {
+          "background": "#EDEFF0",
+          "text": "#151615",
+          "button": "#263B34",
+          "button_label": "#FFFFFF"
+        }
+      }
+    }
+  }
+}

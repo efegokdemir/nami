@@ -1,0 +1,2 @@
+<div {{ block.shopify_attributes }}>{% if block.settings.video != blank %}{{ block.settings.video | video_tag: controls: true, autoplay: false, preload: 'none' }}{% elsif request.design_mode %}<p class="editor-help">Select a video.</p>{% endif %}</div>
+{% schema %}{"name":"Video","settings":[{"type":"video","id":"video","label":"Shopify-hosted video"}],"presets":[{"name":"Video"}]}{% endschema %}

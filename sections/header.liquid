@@ -1,11 +1,123 @@
-<header class="site-header{% if section.settings.sticky %} site-header--sticky{% endif %}" data-header>
-  <div class="page-width header-inner">
-    <button class="icon-button mobile-only" type="button" aria-expanded="false" aria-controls="MobileNav" data-menu-toggle>{% render 'icon', name: 'menu' %}<span class="visually-hidden">{{ 'general.accessibility.menu' | t }}</span></button>
-    <a class="wordmark" href="{{ routes.root_url }}">{% if settings.logo != blank %}{{ settings.logo | image_url: width: 560 | image_tag: widths: '160,280,560', sizes: '160px', width: settings.logo_width, alt: shop.name }}{% else %}Nami{% endif %}</a>
-    <nav class="desktop-nav" aria-label="Primary">{% for link in section.settings.menu.links %}<div class="nav-item">{% if link.links != blank %}<details><summary>{{ link.title }}</summary><div class="mega-menu"><div class="mega-menu__links">{% for child in link.links %}<a href="{{ child.url }}">{{ child.title }}</a>{% for grandchild in child.links %}<a class="mega-menu__child" href="{{ grandchild.url }}">{{ grandchild.title }}</a>{% endfor %}{% endfor %}</div></div></details>{% else %}<a href="{{ link.url }}">{{ link.title }}</a>{% endif %}</div>{% endfor %}</nav>
-    <div class="header-actions"><a class="icon-button" href="{{ routes.search_url }}" data-search-open>{% render 'icon', name: 'search' %}<span class="visually-hidden">{{ 'general.search.search' | t }}</span></a><a class="icon-button" href="{{ routes.cart_url }}" data-cart-open>{% render 'icon', name: 'cart' %}<span class="cart-count" data-cart-count>{{ cart.item_count }}</span><span class="visually-hidden">{{ 'general.accessibility.cart' | t }}</span></a></div>
-  </div>
-  <nav id="MobileNav" class="mobile-nav" hidden data-mobile-nav aria-label="Mobile"><div class="mobile-nav__inner"><button class="icon-button mobile-nav__close" type="button" data-menu-close>{% render 'icon', name: 'close' %}<span class="visually-hidden">{{ 'general.accessibility.close' | t }}</span></button>{% for link in section.settings.menu.links %}<a href="{{ link.url }}">{{ link.title }}</a>{% for child in link.links %}<a class="mobile-nav__child" href="{{ child.url }}">{{ child.title }}</a>{% endfor %}{% endfor %}</div></nav>
-  <div class="search-drawer" hidden data-predictive-search data-search-url="{{ routes.predictive_search_url }}"><div class="page-width"><form action="{{ routes.search_url }}" method="get" role="search"><label class="visually-hidden" for="PredictiveSearchInput">{{ 'general.search.search' | t }}</label><input id="PredictiveSearchInput" class="search-input" type="search" name="q" autocomplete="off" placeholder="{{ 'general.search.placeholder' | t }}" data-search-input><button class="icon-button" type="button" data-search-close>{% render 'icon', name: 'close' %}<span class="visually-hidden">{{ 'general.accessibility.close' | t }}</span></button></form><div class="predictive-results" data-predictive-results></div></div></div>
+<header class="site-header{% if section.settings.sticky %} site-header--sticky{% endif %}{% if section.settings.transparent %} site-header--transparent{% endif %} color-{{ section.settings.color_scheme }} logo-{{ section.settings.logo_position }}" data-header>
+<div class="page-width header-inner"><button class="icon-button mobile-only" type="button" aria-expanded="false" aria-controls="MobileNav" data-menu-toggle>{% render 'icon', name: 'menu' %}<span class="visually-hidden">{{ 'general.accessibility.menu' | t }}</span></button><a class="wordmark" href="{{ routes.root_url }}">{% if settings.logo != blank %}{{ settings.logo | image_url: width: 560 | image_tag: width: settings.logo_width, alt: shop.name }}{% else %}{{ shop.name | escape }}{% endif %}</a>
+<nav class="desktop-nav" aria-label="Primary">{% for link in section.settings.menu.links %}{% liquid
+assign menu_promo = nil
+assign link_key = link.title | handleize
+for block in section.blocks
+assign trigger_key = block.settings.trigger | handleize
+if trigger_key == link_key
+assign menu_promo = block
+break
+endif
+endfor
+%}<div class="nav-item">{% if link.links != blank or menu_promo != blank %}<details><summary>{{ link.title | escape }}</summary><div class="mega-menu"><div class="mega-menu__links">{% for child in link.links %}<div><a href="{{ child.url }}">{{ child.title | escape }}</a>{% for grandchild in child.links %}<a class="mega-menu__child" href="{{ grandchild.url }}">{{ grandchild.title | escape }}</a>{% endfor %}</div>{% endfor %}</div>{% if menu_promo != blank %}<div class="mega-menu__promo" {{ menu_promo.shopify_attributes }}>{% liquid
+assign promo_image = menu_promo.settings.image | default: menu_promo.settings.collection.image | default: menu_promo.settings.product.featured_image
+assign promo_title = menu_promo.settings.heading | default: menu_promo.settings.collection.title | default: menu_promo.settings.product.title
+assign promo_url = menu_promo.settings.link | default: menu_promo.settings.collection.url | default: menu_promo.settings.product.url
+%}{% if promo_image != blank %}{% render 'image', image: promo_image, width: 600 %}{% endif %}{% if promo_url != blank %}<a href="{{ promo_url }}">{{ promo_title | escape }}</a>{% else %}<p>{{ promo_title | escape }}</p>{% endif %}{{ menu_promo.settings.text }}</div>{% endif %}</div></details>{% else %}<a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>{% endif %}</div>{% endfor %}</nav>
+<div class="header-actions">{% if section.settings.show_localization %}{% render 'localization', id: section.id %}{% endif %}{% if shop.customer_accounts_enabled %}<a class="icon-button" href="{{ routes.account_url }}" aria-label="Account">{% render 'icon', name: 'account' %}</a>{% endif %}<a class="icon-button" href="{{ routes.search_url }}" data-search-open>{% render 'icon', name: 'search' %}<span class="visually-hidden">{{ 'general.search.search' | t }}</span></a><a class="icon-button" href="{{ routes.cart_url }}"{% if settings.cart_type != 'page' %} data-cart-open{% endif %}>{% render 'icon', name: 'cart' %}<span class="cart-count" data-cart-count>{{ cart.item_count }}</span><span class="visually-hidden">{{ 'general.accessibility.cart' | t }}</span></a></div></div>
+<nav id="MobileNav" class="mobile-nav" hidden role="dialog" aria-modal="true" aria-label="Menu" data-mobile-nav><div class="mobile-nav__inner"><p class="mobile-nav__brand">{{ shop.name | escape }}</p><button class="icon-button mobile-nav__close" type="button" data-menu-close>{% render 'icon', name: 'close' %}<span class="visually-hidden">{{ 'general.accessibility.close' | t }}</span></button>{% for link in section.settings.menu.links %}{% if link.links != blank %}<details><summary>{{ link.title | escape }}</summary><a class="mobile-nav__child" href="{{ link.url }}">{{ link.title | escape }}</a>{% for child in link.links %}<a class="mobile-nav__child" href="{{ child.url }}">{{ child.title | escape }}</a>{% for grandchild in child.links %}<a class="mobile-nav__child" href="{{ grandchild.url }}">{{ grandchild.title | escape }}</a>{% endfor %}{% endfor %}</details>{% else %}<a href="{{ link.url }}">{{ link.title | escape }}</a>{% endif %}{% endfor %}{% if section.settings.show_localization %}{% render 'localization', id: 'mobile' %}{% endif %}</div></nav>
+<div class="search-drawer" hidden role="dialog" aria-modal="true" aria-label="Search" data-predictive-search data-search-url="{{ routes.predictive_search_url }}"><div class="page-width"><form action="{{ routes.search_url }}" method="get" role="search"><label class="visually-hidden" for="PredictiveSearchInput">{{ 'general.search.search' | t }}</label><input id="PredictiveSearchInput" class="search-input" type="search" name="q" autocomplete="off" placeholder="{{ 'general.search.placeholder' | t }}" data-search-input><button class="icon-button" type="submit" aria-label="{{ 'general.search.submit' | t }}">{% render 'icon', name: 'arrow' %}</button><button class="icon-button" type="button" data-search-close>{% render 'icon', name: 'close' %}<span class="visually-hidden">{{ 'general.accessibility.close' | t }}</span></button></form><div class="predictive-results" data-predictive-results aria-live="polite"></div></div></div>
 </header>
-{% schema %}{"name":"Header","settings":[{"type":"link_list","id":"menu","label":"Menu","default":"main-menu"},{"type":"checkbox","id":"sticky","label":"Sticky header","default":true}],"presets":[{"name":"Header"}]}{% endschema %}
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "Sticky header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent",
+      "label": "Transparent over homepage hero",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "logo_position",
+      "label": "Desktop logo position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_localization",
+      "label": "Show country and language selectors",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promo",
+      "name": "Mega menu promotion",
+      "settings": [
+        {
+          "type": "text",
+          "id": "trigger",
+          "label": "Menu item title",
+          "info": "Match the title of a top-level menu item."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Featured collection"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Featured product"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header"
+    }
+  ]
+}
+{% endschema %}

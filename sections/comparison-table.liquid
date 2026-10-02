@@ -1,2 +1,243 @@
-<section class="section"><div class="page-width"><div class="section-heading"><h2>{{ section.settings.heading }}</h2></div><div class="comparison-table" role="table"><div class="comparison-table__row comparison-table__row--head" role="row"><div>{{ section.settings.feature_label }}</div>{% for block in section.blocks %}<div {{ block.shopify_attributes }}>{{ block.settings.name }}</div>{% endfor %}</div><div class="comparison-table__row"><div>{{ section.settings.row_one }}</div>{% for block in section.blocks %}<div>{{ block.settings.row_one_value }}</div>{% endfor %}</div><div class="comparison-table__row"><div>{{ section.settings.row_two }}</div>{% for block in section.blocks %}<div>{{ block.settings.row_two_value }}</div>{% endfor %}</div><div class="comparison-table__row"><div>{{ section.settings.row_three }}</div>{% for block in section.blocks %}<div>{{ block.settings.row_three_value }}</div>{% endfor %}</div></div></div></section>
-{% schema %}{"name":"Comparison table","max_blocks":4,"settings":[{"type":"text","id":"heading","label":"Heading","default":"Compare the details"},{"type":"text","id":"feature_label","label":"Feature label","default":"Features"},{"type":"text","id":"row_one","label":"Row one","default":"Material"},{"type":"text","id":"row_two","label":"Row two","default":"Care"},{"type":"text","id":"row_three","label":"Row three","default":"Warranty"}],"blocks":[{"type":"column","name":"Column","settings":[{"type":"text","id":"name","label":"Column name","default":"Option"},{"type":"text","id":"row_one_value","label":"Row one value","default":"Details"},{"type":"text","id":"row_two_value","label":"Row two value","default":"Details"},{"type":"text","id":"row_three_value","label":"Row three value","default":"Details"}]}],"presets":[{"name":"Comparison table","blocks":[{"type":"column"},{"type":"column"}]}]}{% endschema %}
+{% render 'section-style', section: section %}
+{% if section.blocks.size > 0 %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width"><div class="section-heading"><h2>{{ section.settings.heading | escape }}</h2></div><div class="comparison-table" tabindex="0" role="region" aria-label="{{ section.settings.heading | escape }}"><table><caption class="visually-hidden">{{ section.settings.heading | escape }}</caption><thead><tr><th scope="col">{{ section.settings.feature_label | escape }}</th>{% for i in (1..section.settings.columns) %}{% assign key = 'column_' | append: i %}<th scope="col">{{ section.settings[key] | escape }}</th>{% endfor %}</tr></thead><tbody>{% for block in section.blocks %}<tr {{ block.shopify_attributes }}><th scope="row">{{ block.settings.label | escape }}</th>{% for i in (1..section.settings.columns) %}{% assign key = 'value_' | append: i %}<td>{% case block.settings[key] %}{% when 'yes' %}<span aria-label="Included">✓</span>{% when 'no' %}<span aria-label="Not included">−</span>{% else %}{{ block.settings[key] | escape }}{% endcase %}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div></div></section>{% endif %}
+{% schema %}
+{
+  "name": "Comparison table",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "feature_label",
+      "label": "Row heading",
+      "default": "Features"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Comparison columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "column_1",
+      "label": "Column 1 title",
+      "default": "Option 1"
+    },
+    {
+      "type": "text",
+      "id": "column_2",
+      "label": "Column 2 title",
+      "default": "Option 2"
+    },
+    {
+      "type": "text",
+      "id": "column_3",
+      "label": "Column 3 title",
+      "default": "Option 3"
+    },
+    {
+      "type": "text",
+      "id": "column_4",
+      "label": "Column 4 title",
+      "default": "Option 4"
+    },
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page",
+          "label": "Page width"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.section_width == 'page' }}"
+    },
+    {
+      "type": "select",
+      "id": "section_alignment",
+      "label": "Section alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Spacing",
+      "options": [
+        {
+          "value": "compact",
+          "label": "Compact"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "spacious",
+          "label": "Spacious"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Custom top spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Custom bottom spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Comparison row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Row label"
+        },
+        {
+          "type": "text",
+          "id": "value_1",
+          "label": "Column 1 value",
+          "info": "Enter text, yes for a check, or no for a dash."
+        },
+        {
+          "type": "text",
+          "id": "value_2",
+          "label": "Column 2 value",
+          "info": "Enter text, yes for a check, or no for a dash."
+        },
+        {
+          "type": "text",
+          "id": "value_3",
+          "label": "Column 3 value",
+          "info": "Enter text, yes for a check, or no for a dash."
+        },
+        {
+          "type": "text",
+          "id": "value_4",
+          "label": "Column 4 value",
+          "info": "Enter text, yes for a check, or no for a dash."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison table",
+      "blocks": [
+        {
+          "type": "row"
+        },
+        {
+          "type": "row"
+        },
+        {
+          "type": "row"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

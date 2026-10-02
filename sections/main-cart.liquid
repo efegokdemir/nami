@@ -1,2 +1,151 @@
-<section class="section"><div class="page-width"><div class="section-heading"><h1>{{ 'cart.general.title' | t }}</h1></div>{% if cart.item_count > 0 %}<form action="{{ routes.cart_url }}" method="post"><div class="cart-page-lines">{% for item in cart.items %}<div class="cart-line"><a href="{{ item.url }}">{{ item.image | image_url: width: 240 | image_tag: width: 120, height: 150, alt: item.image.alt }}</a><div><h2><a href="{{ item.url }}">{{ item.product.title }}</a></h2><p>{{ item.variant.title }}</p><label for="CartQuantity-{{ item.key }}">{{ 'cart.general.quantity' | t }}</label><div class="quantity"><input id="CartQuantity-{{ item.key }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0"></div><p><a class="cart-line__remove" href="{{ item.url_to_remove }}">{{ 'cart.general.remove' | t }}</a></p></div><strong>{{ item.final_line_price | money }}</strong></div>{% endfor %}</div><div class="cart-total" style="margin-top:2rem"><span>{{ 'cart.general.subtotal' | t }}</span><span>{{ cart.total_price | money }}</span></div><label for="CartNote">{{ 'cart.general.note' | t }}</label><textarea id="CartNote" class="cart-note" name="note" rows="3">{{ cart.note }}</textarea><div style="margin-top:1rem"><button class="button button--secondary" type="submit" name="update">{{ 'cart.general.update' | t }}</button><button class="button button--primary" type="submit" name="checkout">{{ 'cart.general.checkout' | t }}</button></div></form>{% else %}<div class="card"><p>{{ 'cart.general.empty' | t }}</p><a class="button button--primary" href="{{ routes.root_url }}">{{ 'cart.general.continue_shopping' | t }}</a></div>{% endif %}</div></section>
-{% schema %}{"name":"Cart","settings":[],"presets":[{"name":"Cart"}]}{% endschema %}
+{% render 'section-style', section: section %}
+<section class="section"><div class="page-width"><div class="section-heading"><h1>{{ 'cart.general.title' | t }}</h1></div>{% if cart.item_count > 0 %}<form action="{{ routes.cart_url }}" method="post"><div class="cart-page-lines">{% for item in cart.items %}<div class="cart-line"><a href="{{ item.url }}">{{ item.image | image_url: width: 240 | image_tag: width: 120, height: 150, alt: item.image.alt }}</a><div><h2><a href="{{ item.url }}">{{ item.product.title }}</a></h2><p>{{ item.variant.title }}</p><label for="CartQuantity-{{ item.key }}">{{ 'cart.general.quantity' | t }}</label><div class="quantity"><input id="CartQuantity-{{ item.key }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0"></div><p><a class="cart-line__remove" href="{{ item.url_to_remove }}">{{ 'cart.general.remove' | t }}</a></p></div><strong>{{ item.final_line_price | money }}</strong></div>{% endfor %}</div><div class="cart-total" style="margin-top:2rem"><span>{{ 'cart.general.subtotal' | t }}</span><span>{{ cart.total_price | money }}</span></div>{% if settings.cart_note %}<label for="CartNote">{{ 'cart.general.note' | t }}</label><textarea id="CartNote" class="cart-note" name="note" rows="3">{{ cart.note }}</textarea>{% endif %}<div style="margin-top:1rem"><button class="button button--secondary" type="submit" name="update">{{ 'cart.general.update' | t }}</button><button class="button button--primary" type="submit" name="checkout">{{ 'cart.general.checkout' | t }}</button></div></form>{% else %}<div class="card"><p>{{ 'cart.general.empty' | t }}</p><a class="button button--primary" href="{{ routes.root_url }}">{{ 'cart.general.continue_shopping' | t }}</a></div>{% endif %}</div></section>
+{% schema %}
+{
+  "name": "Cart",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page",
+          "label": "Page width"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.section_width == 'page' }}"
+    },
+    {
+      "type": "select",
+      "id": "section_alignment",
+      "label": "Section alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Spacing",
+      "options": [
+        {
+          "value": "compact",
+          "label": "Compact"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "spacious",
+          "label": "Spacious"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Custom top spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Custom bottom spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart"
+    }
+  ]
+}
+{% endschema %}

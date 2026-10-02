@@ -1,2 +1,337 @@
-<section class="section"><div class="page-width"><div class="section-heading"><h2>{{ section.settings.heading }}</h2></div><div class="bento-grid">{% for block in section.blocks %}<article class="card bento-grid__item bento-grid__item--{{ block.settings.size }}" {{ block.shopify_attributes }}>{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 1000 | image_tag: widths: '320,640,1000', sizes: '(min-width: 750px) 50vw, 100vw', alt: block.settings.heading }}{% endif %}<div><p class="eyebrow">{{ block.settings.eyebrow }}</p><h3>{{ block.settings.heading }}</h3><p>{{ block.settings.text }}</p></div></article>{% endfor %}</div></div></section>
-{% schema %}{"name":"Bento grid","max_blocks":6,"settings":[{"type":"text","id":"heading","label":"Heading","default":"A little more character."}],"blocks":[{"type":"tile","name":"Tile","settings":[{"type":"image_picker","id":"image","label":"Image"},{"type":"select","id":"size","label":"Tile size","options":[{"value":"standard","label":"Standard"},{"value":"wide","label":"Wide"},{"value":"tall","label":"Tall"}],"default":"standard"},{"type":"text","id":"eyebrow","label":"Eyebrow"},{"type":"text","id":"heading","label":"Heading","default":"A detail worth noticing"},{"type":"textarea","id":"text","label":"Text","default":"Tell a concise story."}]}],"presets":[{"name":"Bento grid","blocks":[{"type":"tile"},{"type":"tile"},{"type":"tile"}]}]}{% endschema %}
+{% assign meaningful_blocks = 0 %}{% for block in section.blocks %}{% if block.settings.heading != blank or block.settings.image != blank or block.settings.product != blank or block.settings.collection != blank %}{% assign meaningful_blocks = meaningful_blocks | plus: 1 %}{% endif %}{% endfor %}{% if meaningful_blocks > 0 or request.design_mode %}
+{% render 'section-style', section: section %}
+{% if section.blocks.size > 0 or request.design_mode %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width"><div class="section-heading"><h2>{{ section.settings.heading | escape }}</h2></div><div class="capability-bento" style="--bento-columns:{{ section.settings.columns }};--bento-row-height:{{ section.settings.row_height }}px">
+{% for block in section.blocks %}{% liquid
+assign tile_image = block.settings.image | default: block.settings.product.featured_image | default: block.settings.collection.image
+assign tile_title = block.settings.heading | default: block.settings.product.title | default: block.settings.collection.title
+assign tile_url = block.settings.link | default: block.settings.product.url | default: block.settings.collection.url
+%}{% if tile_title != blank or tile_image != blank or request.design_mode %}<article class="bento-tile bento-tile--{{ block.settings.size }} bento-tile--{{ block.settings.presentation }} color-{{ block.settings.color_scheme }} align-{{ block.settings.alignment }}" {{ block.shopify_attributes }} style="--tile-overlay:{{ block.settings.overlay | divided_by: 100.0 }}">
+{% if tile_image != blank %}<div class="bento-tile__media"><picture>{% if block.settings.mobile_image != blank %}<source media="(max-width:749px)" srcset="{{ block.settings.mobile_image | image_url: width: 900 }}">{% endif %}{% render 'image', image: tile_image, width: 1400 %}</picture></div>{% elsif request.design_mode %}{% render 'image' %}{% endif %}<div class="bento-tile__content">{% if block.settings.eyebrow != blank %}<p class="eyebrow">{{ block.settings.eyebrow | escape }}</p>{% endif %}<h3>{% if tile_url != blank %}<a href="{{ tile_url }}">{{ tile_title | escape }}</a>{% else %}{{ tile_title | escape }}{% endif %}</h3>{{ block.settings.text }}{% if block.settings.product != blank %}<div class="price">{{ block.settings.product.price | money }}</div>{% endif %}</div></article>{% endif %}{% endfor %}
+</div></div></section>{% endif %}
+
+{% endif %}
+{% schema %}
+{
+  "name": "Bento grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Desktop columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "row_height",
+      "label": "Standard tile height",
+      "min": 200,
+      "max": 400,
+      "step": 20,
+      "default": 280,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page",
+          "label": "Page width"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.section_width == 'page' }}"
+    },
+    {
+      "type": "select",
+      "id": "section_alignment",
+      "label": "Section alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Spacing",
+      "options": [
+        {
+          "value": "compact",
+          "label": "Compact"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "spacious",
+          "label": "Spacious"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Custom top spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Custom bottom spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px",
+      "visible_if": "{{ section.settings.spacing == 'custom' }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Bento item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Label"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Item size",
+          "options": [
+            {
+              "value": "standard",
+              "label": "Standard"
+            },
+            {
+              "value": "wide",
+              "label": "Wide"
+            },
+            {
+              "value": "tall",
+              "label": "Tall"
+            },
+            {
+              "value": "large",
+              "label": "Large"
+            }
+          ],
+          "default": "standard"
+        },
+        {
+          "type": "select",
+          "id": "presentation",
+          "label": "Text placement",
+          "options": [
+            {
+              "value": "below",
+              "label": "Below image"
+            },
+            {
+              "value": "overlay",
+              "label": "Over image"
+            }
+          ],
+          "default": "below"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "range",
+          "id": "overlay",
+          "label": "Media overlay",
+          "min": 0,
+          "max": 90,
+          "step": 5,
+          "default": 30,
+          "unit": "%"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Text color scheme",
+          "default": "scheme-1"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mixed bento",
+      "blocks": [
+        {
+          "type": "tile",
+          "settings": {
+            "size": "large"
+          }
+        },
+        {
+          "type": "tile"
+        },
+        {
+          "type": "tile"
+        }
+      ]
+    },
+    {
+      "name": "Three equal tiles",
+      "blocks": [
+        {
+          "type": "tile"
+        },
+        {
+          "type": "tile"
+        },
+        {
+          "type": "tile"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
