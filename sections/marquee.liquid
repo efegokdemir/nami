@@ -1,5 +1,7 @@
-{% render 'section-style', section: section %}
-{% if section.blocks.size > 0 or section.settings.text != blank %}<section class="section color-{{ section.settings.color_scheme }}"><div class="capability-marquee{% if section.settings.pause_hover %} pause-hover{% endif %}" style="--marquee-speed:{{ section.settings.speed }}s;--marquee-direction:{{ section.settings.direction }}"><div class="capability-marquee__track">{% for copy in (1..2) %}<div class="capability-marquee__group"{% if copy == 2 %} aria-hidden="true" inert{% endif %}>{% if section.blocks.size > 0 %}{% for block in section.blocks %}<span{% if copy == 1 %} {{ block.shopify_attributes }}{% endif %}>{% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{% endif %}{% render 'icon', name: block.settings.icon %}{{ block.settings.text | escape }}{% if block.settings.link != blank %}</a>{% endif %}</span>{% endfor %}{% else %}<span>{{ section.settings.text | escape }}</span>{% endif %}</div>{% endfor %}</div></div></section>{% endif %}
+{% assign meaningful = 0 %}{% for block in section.blocks %}{% if block.settings.text != blank or block.settings.icon != 'none' and block.settings.icon != blank %}{% assign meaningful = meaningful | plus: 1 %}{% endif %}{% endfor %}
+{% if meaningful > 0 or section.settings.text != blank or request.design_mode %}{% render 'section-style', section: section %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width"><div class="capability-marquee{% if section.settings.pause_hover %} marquee-animated{% endif %}" data-marquee style="--marquee-speed:{{ section.settings.speed }}s;--marquee-direction:{{ section.settings.direction }}">
+{% if section.settings.pause_hover and meaningful > 0 or section.settings.pause_hover and section.settings.text != blank %}<button class="marquee-pause" type="button" data-marquee-pause aria-pressed="false" hidden>Pause animation</button>{% endif %}
+<div class="capability-marquee__track">{% for copy in (1..2) %}<div class="capability-marquee__group"{% if copy == 2 %} aria-hidden="true" inert{% endif %}>{% if meaningful > 0 %}{% for block in section.blocks %}{% if block.settings.text != blank or block.settings.icon != 'none' and block.settings.icon != blank %}<span{% if copy == 1 %} {{ block.shopify_attributes }}{% endif %}>{% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{% endif %}{% render 'icon', name: block.settings.icon %}{{ block.settings.text | escape }}{% if block.settings.link != blank %}</a>{% endif %}</span>{% endif %}{% endfor %}{% elsif section.settings.text != blank %}<span>{{ section.settings.text | escape }}</span>{% elsif request.design_mode and copy == 1 %}<p class="editor-help">Add a message.</p>{% endif %}</div>{% endfor %}</div></div></div></section>{% endif %}
 {% schema %}
 {
   "name": "Marquee",
@@ -17,7 +19,8 @@
       "max": 60,
       "step": 5,
       "default": 30,
-      "unit": "s"
+      "unit": "s",
+      "visible_if": "{{ section.settings.pause_hover }}"
     },
     {
       "type": "select",
@@ -33,13 +36,15 @@
           "label": "Right"
         }
       ],
-      "default": "normal"
+      "default": "normal",
+      "visible_if": "{{ section.settings.pause_hover }}"
     },
     {
       "type": "checkbox",
       "id": "pause_hover",
-      "label": "Pause on hover",
-      "default": true
+      "label": "Animate messages",
+      "default": false,
+      "info": "Animated messages always pause on hover/focus and include a pause button. Previously this setting controlled hover pause; off now uses a static layout."
     },
     {
       "type": "header",
@@ -103,18 +108,18 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",
           "label": "Custom"
         }
       ],
-      "default": "normal"
+      "default": "compact"
     },
     {
       "type": "range",

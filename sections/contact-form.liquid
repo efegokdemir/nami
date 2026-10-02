@@ -1,5 +1,9 @@
-{% render 'section-style', section: section %}
-<section class="section"><div class="page-width"><div class="rich-text"><p class="eyebrow">{{ section.settings.eyebrow }}</p><h1>{{ section.settings.heading }}</h1></div>{% form 'contact', class: 'contact-form', style: 'max-width:680px;margin:3rem auto 0' %}{% if form.posted_successfully? %}<p role="status">{{ 'sections.contact.success' | t }}</p>{% endif %}<label for="ContactName">Name</label><input id="ContactName" type="text" name="contact[name]" required><label for="ContactEmail">Email</label><input id="ContactEmail" type="email" name="contact[email]" required><label for="ContactMessage">Message</label><textarea id="ContactMessage" name="contact[body]" rows="7" required></textarea><button class="button button--primary" type="submit">{{ section.settings.button_label }}</button>{% endform %}</div></section>
+{% render 'section-style', section: section %}{% assign contact_id = 'Contact-' | append: section.id %}
+<section class="section"><div class="page-width"><div class="rich-text"><p class="eyebrow">{{ section.settings.eyebrow | escape }}</p><h2>{{ section.settings.heading | escape }}</h2></div>{% form 'contact', id: contact_id, class: 'contact-form' %}
+{% if form.errors %}<div id="{{ contact_id }}-Errors" role="alert">{{ form.errors | default_errors }}</div>{% endif %}{% if form.posted_successfully? %}<p role="status">{{ 'sections.contact.success' | t }}</p>{% endif %}
+<label for="{{ contact_id }}-Name">Name</label><input id="{{ contact_id }}-Name" type="text" name="contact[name]" autocomplete="name" required>
+<label for="{{ contact_id }}-Email">Email</label><input id="{{ contact_id }}-Email" type="email" name="contact[email]" autocomplete="email" required{% if form.errors contains 'email' %} aria-invalid="true" aria-describedby="{{ contact_id }}-Errors"{% endif %}>
+<label for="{{ contact_id }}-Message">Message</label><textarea id="{{ contact_id }}-Message" name="contact[body]" rows="4" required></textarea><button class="button button--primary" type="submit">{{ section.settings.button_label | escape }}</button>{% endform %}</div></section>
 {% schema %}
 {
   "name": "Contact form",
@@ -103,11 +107,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

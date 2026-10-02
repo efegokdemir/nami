@@ -1,4 +1,4 @@
-{% render 'section-style', section: section %}
+{% render 'section-style', section: section, reading_width: 720 %}
 <section class="section"><div class="page-width rich-text"><h1>{{ page.title }}</h1><div>{{ page.content }}</div></div></section>
 {% schema %}
 {
@@ -86,11 +86,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",
@@ -126,6 +126,11 @@
     {
       "name": "Page"
     }
-  ]
+  ],
+  "enabled_on": {
+    "templates": [
+      "page"
+    ]
+  }
 }
 {% endschema %}

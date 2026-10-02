@@ -1,7 +1,7 @@
-{% assign meaningful_blocks = 0 %}{% for block in section.blocks %}{% if block.settings.heading != blank and block.settings.content != blank or block.settings.page != blank %}{% assign meaningful_blocks = meaningful_blocks | plus: 1 %}{% endif %}{% endfor %}{% if meaningful_blocks > 0 or request.design_mode %}
-{% render 'section-style', section: section %}
+{% assign meaningful_blocks = 0 %}{% for block in section.blocks %}{% if block.settings.heading != blank and block.settings.content != blank or block.settings.heading != blank and block.settings.page.content != blank %}{% assign meaningful_blocks = meaningful_blocks | plus: 1 %}{% endif %}{% endfor %}{% if meaningful_blocks > 0 or request.design_mode %}
+{% render 'section-style', section: section, reading_width: 900 %}
 {% if section.blocks.size > 0 or request.design_mode %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width accordion-section"><div class="section-heading"><div><h2>{{ section.settings.heading | escape }}</h2>{{ section.settings.intro }}</div></div><div class="accordion" data-accordion{% if section.settings.single_open %} data-single-open{% endif %}>
-{% for block in section.blocks %}<details{% if section.settings.expanded_first and forloop.first %} open{% endif %} {{ block.shopify_attributes }}><summary>{% if block.settings.icon != 'none' %}{% render 'icon', name: block.settings.icon %}{% endif %}{{ block.settings.heading | escape }}</summary><div class="accordion__content">{{ block.settings.content }}{{ block.settings.page.content }}</div></details>{% endfor %}</div></div></section>{% endif %}
+{% assign item_index = 0 %}{% for block in section.blocks %}{% if block.settings.heading != blank and block.settings.content != blank or block.settings.heading != blank and block.settings.page.content != blank %}<details{% if section.settings.expanded_first and item_index == 0 %} open{% endif %} {{ block.shopify_attributes }}><summary>{% if block.settings.icon != 'none' %}{% render 'icon', name: block.settings.icon %}{% endif %}{{ block.settings.heading | escape }}</summary><div class="accordion__content">{{ block.settings.content }}{{ block.settings.page.content }}</div></details>{% assign item_index = item_index | plus: 1 %}{% elsif request.design_mode %}<p class="editor-help" {{ block.shopify_attributes }}>Add a heading and content.</p>{% endif %}{% endfor %}</div></div></section>{% endif %}
 
 {% endif %}
 {% schema %}
@@ -132,11 +132,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

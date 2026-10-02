@@ -5,6 +5,11 @@
   const money = cents => window.namiMoney(cents);
   const observers = new Map();
   const requests = new Map();
+  let headerScrollBound = false;
+  const syncHeader = () => {
+    const header = $('[data-header]'),hero = $('main > .shopify-section:first-child .capability-hero:not(.capability-hero--empty)');
+    if (header) header.classList.toggle('header-solid',!hero || hero.getBoundingClientRect().bottom <= header.offsetHeight);
+  };
   const updateVariant = section => {
     const data = JSON.parse($('[data-product-json]', section)?.textContent || '{}');
     const values = $$('[data-product-option]', section).map(select => select.value);
@@ -35,6 +40,23 @@
     $$('[data-tab-panel]',tabs).forEach((panel,i) => { panel.hidden = i !== index; });
   };
   const init = (root = document) => {
+    if ($('[data-header]')) {
+      if (!headerScrollBound) { window.addEventListener('scroll',syncHeader,{passive:true}); window.addEventListener('resize',syncHeader); headerScrollBound = true; }
+      syncHeader();
+    }
+    $$('[data-autoplay-video]',root).forEach(container => {
+      const video = $('video',container); if (!video || container.dataset.capabilitiesReady) return;
+      container.dataset.capabilitiesReady = 'true';
+      if (matchMedia('(prefers-reduced-motion:reduce)').matches || document.body?.classList?.contains('motion-minimal')) video.controls = true;
+      else video.play().catch(() => { video.controls = true; });
+    });
+    $$('[data-marquee]',root).forEach(section => {
+      if (section.dataset.capabilitiesReady) return;
+      section.dataset.capabilitiesReady = 'true';
+      if (section.classList.contains('marquee-animated') && !matchMedia('(prefers-reduced-motion:reduce)').matches && !document.body?.classList?.contains('motion-minimal')) {
+        section.classList.add('is-enhanced'); const button = $('[data-marquee-pause]',section); if (button) button.hidden = false;
+      }
+    });
     $$('[data-product-section]',root).forEach(section => {
       if (section.dataset.capabilitiesReady) return; section.dataset.capabilitiesReady = 'true';
       $$('[data-option-buttons]',section).forEach(group => { group.hidden = false; const select = $(`[data-option-index="${group.dataset.optionButtons}"]`,section); if (select) select.hidden = true; });
@@ -86,6 +108,10 @@
     if (button.matches('[data-sticky-submit]')) $('[data-product-form] [data-add-to-cart-button]',button.closest('[data-product-section]'))?.click();
     if (button.matches('[data-carousel-prev],[data-carousel-next]')) { const track = $('[data-carousel-track]',button.closest('[data-carousel]')); if (track) track.scrollBy({ left:(button.hasAttribute('data-carousel-prev') ? -1 : 1) * track.clientWidth,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth' }); }
     if (button.matches('[data-tab-button]')) activateTab(button);
+    if (button.matches('[data-marquee-pause]')) {
+      const section = button.closest('[data-marquee]'),paused = section.classList.toggle('is-paused');
+      button.setAttribute('aria-pressed',String(paused)); button.textContent = paused ? 'Resume animation' : 'Pause animation';
+    }
     if (button.matches('[data-quantity-plus],[data-quantity-minus]')) { const input = $('[data-product-quantity]',button.closest('[data-product-section]') || button.closest('form')); if (input) input.value = Math.max(1,Number(input.value || 1) + (button.hasAttribute('data-quantity-plus') ? 1 : -1)); }
     if (button.matches('[data-share-url]')) { const share = {title:button.dataset.shareTitle,url:button.dataset.shareUrl}; const operation = navigator.share ? navigator.share(share) : navigator.clipboard?.writeText(share.url); operation?.catch(() => {}); }
   });

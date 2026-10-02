@@ -1,10 +1,15 @@
+{% assign meaningful_blocks = 0 %}{% for block in section.blocks %}{% if block.type == '@app' or block.settings.heading != blank or block.settings.text != blank or block.settings.button_link != blank and block.settings.button_label != blank %}{% assign meaningful_blocks = meaningful_blocks | plus: 1 %}{% endif %}{% endfor %}
+{% assign has_content = false %}{% if section.settings.image != blank or section.settings.heading != blank or section.settings.text != blank or section.settings.eyebrow != blank or meaningful_blocks > 0 %}{% assign has_content = true %}{% endif %}{% if section.settings.button_link != blank and section.settings.button_label != blank or section.settings.secondary_link != blank and section.settings.secondary_label != blank %}{% assign has_content = true %}{% endif %}
+{% if has_content or request.design_mode %}
 {% render 'section-style', section: section %}
 <section class="section image-text color-{{ section.settings.color_scheme }}"><div class="page-width image-text__layout media-{{ section.settings.media_position }} layout-{{ section.settings.layout }} mobile-media-{{ section.settings.mobile_order }}" style="--media-width:{{ section.settings.media_width }}%;--content-valign:{{ section.settings.vertical_alignment }}">
 {% if section.settings.image != blank or request.design_mode %}<div class="image-text__media ratio-{{ section.settings.image_ratio }}">{% render 'image', image: section.settings.image, width: 1400 %}</div>{% endif %}
 <div class="image-text__content align-{{ section.settings.content_alignment }}">
-{% if section.blocks.size > 0 %}{% for block in section.blocks %}<div {{ block.shopify_attributes }}>{% case block.type %}{% when 'heading' %}<h2>{{ block.settings.heading | escape }}</h2>{% when 'text' %}{{ block.settings.text }}{% when 'button' %}{% if block.settings.button_link != blank %}<a class="button button--{{ block.settings.style }}" href="{{ block.settings.button_link }}">{{ block.settings.button_label | escape }}</a>{% endif %}{% when '@app' %}{% render block %}{% endcase %}</div>{% endfor %}
-{% else %}{% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}<h2>{{ section.settings.heading | escape }}</h2>{{ section.settings.text }}<div class="hero__actions">{% if section.settings.button_link != blank %}<a class="button button--primary" href="{{ section.settings.button_link }}">{{ section.settings.button_label | escape }}</a>{% endif %}{% if section.settings.secondary_link != blank %}<a class="button button--secondary" href="{{ section.settings.secondary_link }}">{{ section.settings.secondary_label | escape }}</a>{% endif %}</div>{% endif %}
+{% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}{% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}</h2>{% endif %}{{ section.settings.text }}<div class="hero__actions">{% if section.settings.button_label != blank and section.settings.button_link != blank %}<a class="button button--primary" href="{{ section.settings.button_link }}">{{ section.settings.button_label | escape }}</a>{% endif %}{% if section.settings.secondary_label != blank and section.settings.secondary_link != blank %}<a class="button button--secondary" href="{{ section.settings.secondary_link }}">{{ section.settings.secondary_label | escape }}</a>{% endif %}</div>
+{% if section.blocks.size > 0 %}{% for block in section.blocks %}<div {{ block.shopify_attributes }}>{% case block.type %}{% when 'heading' %}<h2>{{ block.settings.heading | escape }}</h2>{% when 'text' %}{{ block.settings.text }}{% when 'button' %}{% if block.settings.button_link != blank and block.settings.button_label != blank %}<a class="button button--{{ block.settings.style }}" href="{{ block.settings.button_link }}">{{ block.settings.button_label | escape }}</a>{% endif %}{% when '@app' %}{% render block %}{% endcase %}</div>{% endfor %}
+{% endif %}
 </div></div></section>
+{% endif %}
 {% schema %}
 {
   "name": "Image with text",
@@ -139,38 +144,37 @@
     {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow"
+      "label": "Intro eyebrow"
     },
     {
       "type": "text",
       "id": "heading",
-      "label": "Heading",
-      "default": "Image with text"
+      "label": "Intro heading"
     },
     {
       "type": "richtext",
       "id": "text",
-      "label": "Text"
+      "label": "Intro text"
     },
     {
       "type": "text",
       "id": "button_label",
-      "label": "Button label"
+      "label": "Intro button label"
     },
     {
       "type": "url",
       "id": "button_link",
-      "label": "Button link"
+      "label": "Intro button link"
     },
     {
       "type": "text",
       "id": "secondary_label",
-      "label": "Second button label"
+      "label": "Intro second button label"
     },
     {
       "type": "url",
       "id": "secondary_link",
-      "label": "Second button link"
+      "label": "Intro second button link"
     },
     {
       "type": "header",
@@ -254,11 +258,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

@@ -1,5 +1,7 @@
-{% render 'section-style', section: section %}
-<section class="section"><div class="page-width app-area">{% content_for 'blocks' %}</div></section>
+{% capture area_content %}{% content_for 'blocks' %}{% endcapture %}
+{% assign area_text = area_content | strip_html | strip %}{% assign has_app = false %}{% for block in section.blocks %}{% if block.type contains 'shopify://apps/' %}{% assign has_app = true %}{% endif %}{% endfor %}
+{% if area_text != blank or has_app or area_content contains '<img' or area_content contains '<video' or area_content contains '<iframe' or area_content contains '<input' or area_content contains '<button' or request.design_mode %}
+{% render 'section-style', section: section %}<section class="section"><div class="page-width app-area">{{ area_content }}{% if section.blocks.size == 0 and request.design_mode %}<p class="editor-help">Add a theme or app block.</p>{% endif %}</div></section>{% endif %}
 {% schema %}
 {
   "name": "App and theme blocks",
@@ -79,11 +81,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

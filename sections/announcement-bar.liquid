@@ -1,4 +1,4 @@
-{% if section.settings.text != blank %}<div class="announcement color-{{ section.settings.color_scheme }}"><div class="page-width">{% if section.settings.link != blank %}<a href="{{ section.settings.link }}">{{ section.settings.text | escape }}</a>{% else %}{{ section.settings.text | escape }}{% endif %}</div></div>{% endif %}
+{% if section.settings.text != blank %}<div class="announcement color-{{ section.settings.color_scheme }}"><div class="page-width">{% if section.settings.link != blank %}<a href="{{ section.settings.link }}">{{ section.settings.text }}</a>{% else %}{{ section.settings.text }}{% endif %}</div></div>{% endif %}
 {% schema %}
 {
   "name": "Announcement bar",

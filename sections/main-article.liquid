@@ -1,4 +1,4 @@
-{% render 'section-style', section: section %}
+{% render 'section-style', section: section, reading_width: 720 %}
 <article class="section"><div class="page-width rich-text"><p class="eyebrow">{{ article.published_at | time_tag: format: 'date' }}</p><h1>{{ article.title }}</h1>{% if article.image %}{{ article.image | image_url: width: 1400 | image_tag: widths: '640,1000,1400', sizes: '100vw', loading: 'eager' }}{% endif %}<div>{{ article.content }}</div></div></article>
 {% schema %}
 {
@@ -86,11 +86,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",
@@ -126,6 +126,11 @@
     {
       "name": "Article"
     }
-  ]
+  ],
+  "enabled_on": {
+    "templates": [
+      "article"
+    ]
+  }
 }
 {% endschema %}

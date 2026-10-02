@@ -1,21 +1,5 @@
 {% render 'section-style', section: section %}
-<section class="section hero capability-hero capability-hero--{{ section.settings.layout }} color-{{ section.settings.color_scheme }}" style="--hero-height:{{ section.settings.height }}px;--hero-mobile-height:{{ section.settings.mobile_height }}px;--hero-text-width:{{ section.settings.text_width }}px;--hero-overlay:{{ section.settings.overlay | divided_by: 100.0 }};--hero-overlay-color:{{ section.settings.overlay_color }};--hero-position:{{ section.settings.image_position }};--hero-valign:{{ section.settings.vertical_alignment }}">
-  <div class="page-width capability-hero__layout{% if section.settings.media_position == 'right' %} media-right{% endif %} mobile-media-{{ section.settings.mobile_order }} height-{{ section.settings.height_mode }}">
-    <div class="capability-hero__media">
-      {% if section.settings.video != blank %}{{ section.settings.video | video_tag: image_size: '1600x', autoplay: section.settings.autoplay, loop: section.settings.loop, muted: true, controls: section.settings.controls }}
-      {% elsif section.settings.image != blank %}<picture>{% if section.settings.mobile_image != blank %}<source media="(max-width: 749px)" srcset="{{ section.settings.mobile_image | image_url: width: 900 }}">{% endif %}{{ section.settings.image | image_url: width: 2000 | image_tag: widths: '480,750,1100,1500,2000', sizes: '100vw', loading: 'eager', fetchpriority: 'high' }}</picture>
-      {% else %}{% render 'image' %}{% endif %}
-      {% if section.settings.overlay_enabled %}<div class="capability-hero__overlay" aria-hidden="true"></div>{% endif %}
-    </div>
-    <div class="capability-hero__content align-{{ section.settings.alignment }} mobile-align-{{ section.settings.mobile_alignment }}">
-      {% if section.settings.badge != blank %}<span class="content-badge">{{ section.settings.badge | escape }}</span>{% endif %}
-      {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
-      {% if section.settings.heading != blank %}<{{ section.settings.heading_tag }}>{{ section.settings.heading | escape }}</{{ section.settings.heading_tag }}>{% endif %}
-      {% if section.settings.text != blank %}<div class="rte">{{ section.settings.text }}</div>{% endif %}
-      <div class="hero__actions">{% if section.settings.button_label != blank and section.settings.button_link != blank %}<a class="button button--primary" href="{{ section.settings.button_link }}">{{ section.settings.button_label | escape }}</a>{% endif %}{% if section.settings.secondary_label != blank and section.settings.secondary_link != blank %}<a class="button button--secondary" href="{{ section.settings.secondary_link }}">{{ section.settings.secondary_label | escape }}</a>{% endif %}</div>
-    </div>
-  </div>
-</section>
+{% render 'hero', section: section %}
 {% schema %}
 {
   "name": "Hero",
@@ -24,7 +8,20 @@
       "type": "select",
       "id": "heading_size",
       "label": "Heading size",
-      "options": [{"value":"small","label":"Small"},{"value":"medium","label":"Medium"},{"value":"large","label":"Large"}],
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
       "default": "medium"
     },
     {
@@ -55,7 +52,8 @@
     {
       "type": "image_picker",
       "id": "mobile_image",
-      "label": "Mobile image"
+      "label": "Mobile image",
+      "visible_if": "{{ section.settings.image != blank }}"
     },
     {
       "type": "video",
@@ -66,19 +64,22 @@
       "type": "checkbox",
       "id": "autoplay",
       "label": "Autoplay video (muted)",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.video != blank }}"
     },
     {
       "type": "checkbox",
       "id": "loop",
       "label": "Loop video",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.video != blank }}"
     },
     {
       "type": "checkbox",
       "id": "controls",
       "label": "Video controls",
-      "default": true
+      "default": true,
+      "visible_if": "{{ section.settings.video != blank }}"
     },
     {
       "type": "select",
@@ -94,27 +95,30 @@
           "label": "Adapt to image"
         }
       ],
-      "default": "fixed"
+      "default": "fixed",
+      "visible_if": "{{ section.settings.image != blank or section.settings.mobile_image != blank or section.settings.video != blank }}"
     },
     {
       "type": "range",
       "id": "height",
-      "label": "Desktop height",
+      "label": "Desktop minimum height",
       "min": 320,
       "max": 800,
       "step": 20,
-      "default": 560,
-      "unit": "px"
+      "default": 480,
+      "unit": "px",
+      "visible_if": "{{ section.settings.height_mode == 'fixed' and section.settings.image != blank or section.settings.mobile_image != blank or section.settings.video != blank }}"
     },
     {
       "type": "range",
       "id": "mobile_height",
-      "label": "Mobile height",
+      "label": "Mobile minimum height",
       "min": 240,
       "max": 640,
       "step": 20,
-      "default": 360,
-      "unit": "px"
+      "default": 240,
+      "unit": "px",
+      "visible_if": "{{ section.settings.height_mode == 'fixed' and section.settings.image != blank or section.settings.mobile_image != blank or section.settings.video != blank }}"
     },
     {
       "type": "select",
@@ -138,7 +142,8 @@
           "label": "Bottom"
         }
       ],
-      "default": "focal"
+      "default": "focal",
+      "visible_if": "{{ section.settings.image != blank }}"
     },
     {
       "type": "text",
@@ -221,6 +226,7 @@
       "type": "select",
       "id": "vertical_alignment",
       "label": "Vertical position",
+      "visible_if": "{{ section.settings.image != blank or section.settings.mobile_image != blank or section.settings.video != blank }}",
       "options": [
         {
           "value": "start",
@@ -261,13 +267,15 @@
           "label": "Right"
         }
       ],
-      "default": "right"
+      "default": "right",
+      "visible_if": "{{ section.settings.layout == 'split' and section.settings.image != blank or section.settings.mobile_image != blank or section.settings.video != blank }}"
     },
     {
       "type": "checkbox",
       "id": "overlay_enabled",
       "label": "Enable media overlay",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.image != blank or section.settings.mobile_image != blank or section.settings.video != blank }}"
     },
     {
       "type": "range",
@@ -284,7 +292,8 @@
       "type": "color",
       "id": "overlay_color",
       "label": "Overlay color",
-      "default": "#000000"
+      "default": "#000000",
+      "visible_if": "{{ section.settings.overlay_enabled }}"
     },
     {
       "type": "select",
@@ -300,7 +309,8 @@
           "label": "Below content"
         }
       ],
-      "default": "first"
+      "default": "first",
+      "visible_if": "{{ section.settings.layout == 'split' and section.settings.image != blank or section.settings.mobile_image != blank or section.settings.video != blank }}"
     },
     {
       "type": "select",
@@ -384,11 +394,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

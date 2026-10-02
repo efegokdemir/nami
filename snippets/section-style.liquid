@@ -1,21 +1,32 @@
 {% liquid
-assign section_space = 48
+assign section_space = 'var(--section-standard)'
 if section.settings.spacing == 'compact'
-assign section_space = 24
+assign section_space = 'var(--section-compact)'
 elsif section.settings.spacing == 'spacious'
-assign section_space = 80
+assign section_space = 'var(--section-generous)'
 endif
 assign top = section_space
 assign bottom = section_space
 if section.settings.spacing == 'custom'
-assign top = section.settings.padding_top
-assign bottom = section.settings.padding_bottom
+assign top = section.settings.padding_top | append: 'px'
+assign bottom = section.settings.padding_bottom | append: 'px'
 endif
 assign content_width = 'var(--page-width,1280px)'
+if reading_width
+assign content_width = reading_width | append: 'px'
+endif
 if section.settings.content_width == 'narrow'
+if reading_width
+assign content_width = '640px'
+else
 assign content_width = '880px'
+endif
 elsif section.settings.content_width == 'wide'
+if reading_width
+assign content_width = '1000px'
+else
 assign content_width = '1600px'
+endif
 endif
 assign heading_size = 'clamp(25px,2.6vw,34px)'
 assign scheme = settings.color_schemes[section.settings.color_scheme]
@@ -25,12 +36,12 @@ elsif section.settings.heading_size == 'large'
 assign heading_size = 'clamp(30px,4vw,48px)'
 endif
 %}<style>
-#shopify-section-{{ section.id }} > .section { padding-top:{{ top }}px; padding-bottom:{{ bottom }}px;{% if scheme != blank %} --page-bg:{{ scheme.settings.background }}; --text:{{ scheme.settings.text }}; --accent:{{ scheme.settings.button }}; --accent-contrast:{{ scheme.settings.button_label }}; --muted:color-mix(in srgb,var(--text) 72%,var(--page-bg)); --surface-soft:color-mix(in srgb,var(--page-bg) 92%,var(--text)); --border:color-mix(in srgb,var(--text) 18%,var(--page-bg)); background:{{ scheme.settings.background_gradient | default: scheme.settings.background }}; color:var(--text);{% endif %} }
-#shopify-section-{{ section.id }} > .section > .page-width { {% if section.settings.section_width == 'full' %} max-width:none; width:100%; padding-inline:20px;{% else %} max-width:{{ content_width }};{% endif %} }
+{% if section.settings.spacing == 'custom' %}#shopify-section-{{ section.id }} > .section { --section-stack-top:{{ top }}; }{% endif %}
+#shopify-section-{{ section.id }} > .section { --section-padding-top:{{ top }}; --section-padding-bottom:{{ bottom }}; --content-width:{{ content_width }};{% if scheme != blank %} --page-bg:{{ scheme.settings.background }}; --text:{{ scheme.settings.text }}; --ink:var(--text); --paper:var(--page-bg); --accent:{{ scheme.settings.button }}; --accent-contrast:{{ scheme.settings.button_label }}; --muted:color-mix(in srgb,var(--text) 72%,var(--page-bg)); --surface-soft:color-mix(in srgb,var(--page-bg) 92%,var(--text)); --border:color-mix(in srgb,var(--text) 18%,var(--page-bg)); --line:var(--border); background:{{ scheme.settings.background_gradient | default: scheme.settings.background }}; color:var(--text);{% endif %} }
+#shopify-section-{{ section.id }} > .section > .page-width { {% if section.settings.section_width == 'full' %} max-width:none; width:100%; padding-inline:20px;{% endif %} }
 #shopify-section-{{ section.id }} .section-heading { text-align:{{ section.settings.section_alignment | default: 'left' }}; }
+#shopify-section-{{ section.id }} .rich-text { text-align:{{ section.settings.section_alignment | default: 'center' }}; }
+#shopify-section-{{ section.id }} .rich-text p { margin-inline:{% case section.settings.section_alignment %}{% when 'left' %}0 auto{% when 'right' %}auto 0{% else %}auto{% endcase %}; }
 #shopify-section-{{ section.id }} .section-heading :is(h1,h2), #shopify-section-{{ section.id }} .image-text__content h2, #shopify-section-{{ section.id }} .rich-text h2, #shopify-section-{{ section.id }} > .section > .page-width > :is(h1,h2), #shopify-section-{{ section.id }} .video-layout > div > h2, #shopify-section-{{ section.id }} .slideshow__slide h2, #shopify-section-{{ section.id }} .split--hero .split__content h1 { font-size:{{ heading_size }}; }
 #shopify-section-{{ section.id }} .capability-hero__content :is(h1,h2) { font-size:{% case section.settings.heading_size %}{% when 'small' %}clamp(28px,3vw,40px){% when 'large' %}clamp(36px,5vw,72px){% else %}clamp(32px,4vw,56px){% endcase %}; }
-{% if section.type == 'hero-banner' and section.settings.layout == 'overlay' %}
-#shopify-section-{{ section.id }} .capability-hero--overlay > .page-width { max-width:none; width:100%; padding-inline:max(20px,calc((100vw - var(--page-width))/2)); }
-{% endif %}
 </style>

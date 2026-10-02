@@ -46,7 +46,7 @@ assign tile_url = block.settings.link | default: chosen.url
           "label": "Two"
         }
       ],
-      "default": "1"
+      "default": "2"
     },
     {
       "type": "select",
@@ -134,7 +134,8 @@ assign tile_url = block.settings.link | default: chosen.url
       "type": "text",
       "id": "link_label",
       "label": "View all label",
-      "default": "View all"
+      "default": "View all",
+      "visible_if": "{{ section.settings.show_view_all }}"
     },
     {
       "type": "header",
@@ -238,11 +239,11 @@ assign tile_url = block.settings.link | default: chosen.url
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

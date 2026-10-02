@@ -1,5 +1,8 @@
-{% render 'section-style', section: section %}
-{% if section.blocks.size > 0 %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width"><div class="section-heading"><h2>{{ section.settings.heading | escape }}</h2></div><div class="tabs" data-tabs><div class="tabs__buttons" role="tablist" aria-label="{{ section.settings.heading | escape }}">{% for block in section.blocks %}<button id="Tab-{{ section.id }}-{{ block.id }}" type="button" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" tabindex="{% if forloop.first %}0{% else %}-1{% endif %}" aria-controls="TabPanel-{{ section.id }}-{{ block.id }}" data-tab-button {{ block.shopify_attributes }}>{{ block.settings.heading | escape }}</button>{% endfor %}</div>{% for block in section.blocks %}<div id="TabPanel-{{ section.id }}-{{ block.id }}" aria-labelledby="Tab-{{ section.id }}-{{ block.id }}" role="tabpanel" tabindex="0" data-tab-panel{% unless forloop.first %} hidden{% endunless %}>{{ block.settings.content }}{{ block.settings.page.content }}{{ block.settings.custom_liquid }}</div>{% endfor %}</div></div></section>{% endif %}
+{% assign meaningful = 0 %}{% for block in section.blocks %}{% if block.settings.heading != blank %}{% if block.settings.content != blank or block.settings.page.content != blank or block.settings.custom_liquid != blank %}{% assign meaningful = meaningful | plus: 1 %}{% endif %}{% endif %}{% endfor %}
+{% if meaningful > 0 or request.design_mode %}{% render 'section-style', section: section %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width"><div class="section-heading"><h2>{{ section.settings.heading | escape }}</h2></div>
+{% if meaningful > 0 %}<div class="tabs" data-tabs><div class="tabs__buttons" role="tablist" aria-label="{{ section.settings.heading | default: 'Content' | escape }}">{% assign item_index = 0 %}{% for block in section.blocks %}{% if block.settings.heading != blank %}{% if block.settings.content != blank or block.settings.page.content != blank or block.settings.custom_liquid != blank %}<button id="Tab-{{ section.id }}-{{ block.id }}" type="button" role="tab" aria-selected="{% if item_index == 0 %}true{% else %}false{% endif %}" tabindex="{% if item_index == 0 %}0{% else %}-1{% endif %}" aria-controls="TabPanel-{{ section.id }}-{{ block.id }}" data-tab-button {{ block.shopify_attributes }}>{{ block.settings.heading | escape }}</button>{% assign item_index = item_index | plus: 1 %}{% endif %}{% endif %}{% endfor %}</div>
+{% assign item_index = 0 %}{% for block in section.blocks %}{% if block.settings.heading != blank %}{% if block.settings.content != blank or block.settings.page.content != blank or block.settings.custom_liquid != blank %}<div id="TabPanel-{{ section.id }}-{{ block.id }}" aria-labelledby="Tab-{{ section.id }}-{{ block.id }}" role="tabpanel" tabindex="0" data-tab-panel{% unless item_index == 0 %} hidden{% endunless %}>{{ block.settings.content }}{{ block.settings.page.content }}{{ block.settings.custom_liquid }}</div>{% assign item_index = item_index | plus: 1 %}{% endif %}{% endif %}{% endfor %}</div>
+{% elsif request.design_mode %}<p class="editor-help">Add a labelled tab with content.</p>{% endif %}</div></section>{% endif %}
 {% schema %}
 {
   "name": "Tabs",
@@ -111,11 +114,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

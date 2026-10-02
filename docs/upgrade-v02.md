@@ -6,6 +6,8 @@ The schema comparison uses v0.2 commit `41c301c8f10850dfb35dfe375d0eab81716018a9
 
 ## Exact changes
 
+P0/P1 follow-up preserves saved setting IDs and explicit layout choices. Compact/normal/spacious now use responsive tokens; custom padding remains exact. Legacy Split hero instances still render through the shared Hero implementation but are no longer a separate picker choice. Image with text always renders its labelled Intro fields before content blocks; review previously ignored saved Intro copy for duplication. Marquee's existing `pause_hover` setting is now labelled Animate messages: false gives static content, true retains animation with mandatory hover/focus and persistent pause. New Featured Product instances default to thumbnails; saved explicit stacked galleries remain supported. Template-bound main sections keep working in their native templates but cannot be added to unrelated templates.
+
 | Saved setting/layout | Resolution |
 | --- | --- |
 | `image-with-text.reverse` | Converted to `media_position`: true → right, false → left. An explicitly supplied new setting wins. |

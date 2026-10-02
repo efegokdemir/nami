@@ -4,7 +4,7 @@ This reference describes the unreleased capability-overhaul branch. Merchants su
 
 ## Common controls
 
-Appropriate sections expose page/full width, normal/narrow/wide content, a Shopify color scheme, and compact (24px), normal (48px), spacious (80px) or custom top/bottom spacing (0–160px). Heading scale and heading alignment appear where meaningful. Custom spacing and page-content width controls are conditional. Hero, merchandising, product media and multi-column expose deliberate mobile layout controls rather than arbitrary CSS settings.
+Appropriate sections expose page/full width, normal/narrow/wide content and a Shopify color scheme. One responsive spacing scale supplies Compact (20–32px), Standard (global spacing, initially 56px desktop / about 36px mobile), and Generous (initially about 78px desktop / 50px mobile). Existing saved `normal` / `spacious` values retain their IDs; only their labels change. Custom top/bottom spacing (0–160px) overrides the responsive tokens explicitly. Heading scale and heading alignment appear where meaningful. Custom spacing and page-content width controls are conditional. Hero, merchandising, product media and multi-column expose deliberate mobile layout controls rather than arbitrary CSS settings.
 
 Global visual presets have limited effects: Editorial applies a 400 weight to `h1`/`h2`; Soft sets body-level radius and accent tokens, which section schemes or component rules can override. Minimal and Bold have no dedicated preset rules. These are not four complete storefront designs. Motion Minimal disables CSS animations and transitions; Subtle and Expressive currently share the default behavior. The operating system's reduced-motion preference has separate CSS handling.
 
@@ -26,7 +26,7 @@ Global visual presets have limited effects: Editorial applies a 400 weight to `h
 | Shoppable image | Interactive product discovery | Image, Quick Add; responsive X/Y positions, labels and products | Hotspot |
 | Testimonials | Genuine merchant-entered quotes | Grid, scroll or featured layout | Quote, author, role/company, avatar, optional rating |
 | Logo list | Merchant logos or text | Columns, logo size, grayscale; optional links | Logo/image/text/link |
-| Marquee | Short repeatable messages | Direction, duration, pause on hover/focus; reduced-motion static fallback | Text, icon, link |
+| Marquee | Short repeatable messages | Static by default; existing `pause_hover` ID now labelled Animate messages. Opt-in motion exposes direction/duration, always pauses on hover/focus, and supplies a persistent Pause/Resume button. Reduced-motion/no-JS fallback is static. | Text, icon, link |
 | Timeline | Brand/process/delivery sequence | Vertical or horizontal desktop; vertical mobile | Date/step, heading, rich text, image |
 | Statistics | Merchant-owned factual values | Scheme, width and heading | Value, prefix, suffix, label, text; no fake count-up |
 | Video | Hosted or supported external media | Shopify video, YouTube/Vimeo, poster, hosted muted autoplay/loop/controls, adjacent/above content | Section fields |

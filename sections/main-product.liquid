@@ -53,9 +53,9 @@
     {
       "type": "checkbox",
       "id": "dynamic_checkout",
-      "label": "Show accelerated checkout",
+      "label": "Accelerated checkout (legacy fallback)",
       "default": true,
-      "info": "Used only when there are no information blocks. Otherwise configure the Buy buttons block."
+      "info": "Composed product pages use the Buy buttons block setting instead."
     },
     {
       "type": "checkbox",
@@ -141,11 +141,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",
@@ -379,6 +379,11 @@
         }
       ]
     }
-  ]
+  ],
+  "enabled_on": {
+    "templates": [
+      "product"
+    ]
+  }
 }
 {% endschema %}

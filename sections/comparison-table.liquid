@@ -41,13 +41,15 @@
       "type": "text",
       "id": "column_3",
       "label": "Column 3 title",
-      "default": "Option 3"
+      "default": "Option 3",
+      "visible_if": "{{ section.settings.columns >= 3 }}"
     },
     {
       "type": "text",
       "id": "column_4",
       "label": "Column 4 title",
-      "default": "Option 4"
+      "default": "Option 4",
+      "visible_if": "{{ section.settings.columns >= 4 }}"
     },
     {
       "type": "header",
@@ -151,11 +153,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",
@@ -213,13 +215,15 @@
           "type": "text",
           "id": "value_3",
           "label": "Column 3 value",
-          "info": "Enter text, yes for a check, or no for a dash."
+          "info": "Enter text, yes for a check, or no for a dash.",
+          "visible_if": "{{ section.settings.columns >= 3 }}"
         },
         {
           "type": "text",
           "id": "value_4",
           "label": "Column 4 value",
-          "info": "Enter text, yes for a check, or no for a dash."
+          "info": "Enter text, yes for a check, or no for a dash.",
+          "visible_if": "{{ section.settings.columns >= 4 }}"
         }
       ]
     }

@@ -1,8 +1,8 @@
 {% render 'section-style', section: section %}
-<section class="section split split--hero color-{{ section.settings.color_scheme }}{% if section.settings.reverse %} split--reverse{% endif %}"><div class="page-width split"><div class="split__media">{% render 'image', image: section.settings.image, width: 1200, sizes: '(min-width: 750px) 50vw, 100vw', loading: 'eager' %}</div><div class="split__content"><p class="eyebrow">{{ section.settings.eyebrow }}</p><h1>{{ section.settings.heading }}</h1><div>{{ section.settings.text }}</div>{% if section.settings.button_label != blank %}<a class="button button--primary" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>{% endif %}</div></div></section>
+{% render 'hero', section: section, legacy: true %}
 {% schema %}
 {
-  "name": "Split hero",
+  "name": "Split hero (legacy)",
   "settings": [
     {
       "type": "image_picker",
@@ -123,11 +123,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",
@@ -157,11 +157,6 @@
       "default": 48,
       "unit": "px",
       "visible_if": "{{ section.settings.spacing == 'custom' }}"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Split hero"
     }
   ]
 }

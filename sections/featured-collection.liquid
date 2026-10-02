@@ -55,7 +55,7 @@ assign source_products = source_collection.products
       "min": 2,
       "max": 6,
       "step": 1,
-      "default": 3
+      "default": 4
     },
     {
       "type": "select",
@@ -71,7 +71,7 @@ assign source_products = source_collection.products
           "label": "Two"
         }
       ],
-      "default": "1"
+      "default": "2"
     },
     {
       "type": "checkbox",
@@ -179,7 +179,8 @@ assign source_products = source_collection.products
       "type": "text",
       "id": "link_label",
       "label": "View all label",
-      "default": "View all"
+      "default": "View all",
+      "visible_if": "{{ section.settings.show_view_all }}"
     },
     {
       "type": "header",
@@ -283,11 +284,11 @@ assign source_products = source_collection.products
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

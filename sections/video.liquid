@@ -1,5 +1,5 @@
 {% render 'section-style', section: section %}
-{% if section.settings.video != blank or section.settings.video_url != blank or section.settings.cover != blank or request.design_mode %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width video-layout layout-{{ section.settings.layout }}"><div><h2>{{ section.settings.heading | escape }}</h2>{{ section.settings.text }}</div><div class="video-media">{% if section.settings.video != blank %}{% assign poster = blank %}{% if section.settings.cover != blank %}{% assign poster = section.settings.cover | image_url: width: 1400 %}{% endif %}{{ section.settings.video | video_tag: poster: poster, image_size: '1400x', controls: section.settings.controls, autoplay: section.settings.autoplay, loop: section.settings.loop, muted: section.settings.autoplay }}{% elsif section.settings.video_url != blank %}{% if section.settings.video_url.type == 'youtube' %}<iframe src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}" title="{{ section.settings.heading | escape }}" loading="lazy" allow="fullscreen" allowfullscreen></iframe>{% else %}<iframe src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}" title="{{ section.settings.heading | escape }}" loading="lazy" allow="fullscreen" allowfullscreen></iframe>{% endif %}{% elsif section.settings.cover != blank %}{% render 'image', image: section.settings.cover, width: 1600 %}{% elsif request.design_mode %}<p class="editor-help">Select a video or cover image.</p>{% endif %}</div></div></section>{% endif %}
+{% if section.settings.video != blank or section.settings.video_url != blank or section.settings.cover != blank or request.design_mode %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width video-layout layout-{{ section.settings.layout }}"><div><h2>{{ section.settings.heading | escape }}</h2>{{ section.settings.text }}</div><div class="video-media"{% if section.settings.autoplay %} data-autoplay-video{% endif %}>{% if section.settings.video != blank %}{% assign poster = blank %}{% if section.settings.cover != blank %}{% assign poster = section.settings.cover | image_url: width: 1400 %}{% endif %}{{ section.settings.video | video_tag: poster: poster, image_size: '1400x', controls: section.settings.controls, autoplay: false, loop: section.settings.loop, muted: section.settings.autoplay }}{% elsif section.settings.video_url != blank %}{% if section.settings.video_url.type == 'youtube' %}<iframe src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}" title="{{ section.settings.heading | default: 'Video' | escape }}" loading="lazy" allow="fullscreen" allowfullscreen></iframe>{% else %}<iframe src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}" title="{{ section.settings.heading | default: 'Video' | escape }}" loading="lazy" allow="fullscreen" allowfullscreen></iframe>{% endif %}{% elsif section.settings.cover != blank %}{% render 'image', image: section.settings.cover, width: 1600 %}{% elsif request.design_mode %}<p class="editor-help">Select a video or cover image.</p>{% endif %}</div></div></section>{% endif %}
 {% schema %}
 {
   "name": "Video",
@@ -26,7 +26,8 @@
       "accept": [
         "youtube",
         "vimeo"
-      ]
+      ],
+      "visible_if": "{{ section.settings.video == blank }}"
     },
     {
       "type": "image_picker",
@@ -37,19 +38,22 @@
       "type": "checkbox",
       "id": "autoplay",
       "label": "Autoplay hosted video (muted)",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.video != blank }}"
     },
     {
       "type": "checkbox",
       "id": "controls",
       "label": "Show video controls",
-      "default": true
+      "default": true,
+      "visible_if": "{{ section.settings.video != blank }}"
     },
     {
       "type": "checkbox",
       "id": "loop",
       "label": "Loop hosted video",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.video != blank }}"
     },
     {
       "type": "select",
@@ -149,11 +153,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

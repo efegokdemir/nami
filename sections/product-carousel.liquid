@@ -24,12 +24,13 @@ endif
     {
       "type": "collection",
       "id": "collection",
-      "label": "Collection"
+      "label": "Collection",
+      "info": "Used only when Products is empty."
     },
     {
       "type": "product_list",
       "id": "products",
-      "label": "Manual products",
+      "label": "Products (overrides collection)",
       "limit": 24
     },
     {
@@ -64,7 +65,7 @@ endif
       "min": 2,
       "max": 6,
       "step": 1,
-      "default": 3
+      "default": 4
     },
     {
       "type": "select",
@@ -80,7 +81,7 @@ endif
           "label": "Two"
         }
       ],
-      "default": "1"
+      "default": "2"
     },
     {
       "type": "checkbox",
@@ -188,7 +189,8 @@ endif
       "type": "text",
       "id": "link_label",
       "label": "View all label",
-      "default": "View all"
+      "default": "View all",
+      "visible_if": "{{ section.settings.show_view_all }}"
     },
     {
       "type": "header",
@@ -292,11 +294,11 @@ endif
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

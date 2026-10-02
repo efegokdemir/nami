@@ -1,5 +1,5 @@
-{% render 'section-style', section: section %}
-<section class="section slideshow" data-slideshow><div class="page-width"><div class="slideshow__track">{% for block in section.blocks %}<article class="slideshow__slide" {{ block.shopify_attributes }}><div class="split"><div class="split__media">{% render 'image', image: block.settings.image, width: 1200, sizes: '(min-width: 750px) 50vw, 100vw' %}</div><div class="split__content"><p class="eyebrow">{{ block.settings.eyebrow }}</p><h2>{{ block.settings.heading }}</h2><p>{{ block.settings.text }}</p>{% if block.settings.button_label != blank %}<a class="button button--secondary" href="{{ block.settings.button_link }}">{{ block.settings.button_label }}</a>{% endif %}</div></div></article>{% endfor %}</div></div></section>
+{% assign slide_count = 0 %}{% for block in section.blocks %}{% if block.settings.image != blank or block.settings.heading != blank or block.settings.text != blank %}{% assign slide_count = slide_count | plus: 1 %}{% endif %}{% endfor %}
+{% if slide_count > 0 or request.design_mode %}{% render 'section-style', section: section %}<section class="section slideshow" data-carousel><div class="page-width">{% if slide_count > 1 %}<div class="carousel-controls"><button type="button" data-carousel-prev aria-label="Previous slide">←</button><button type="button" data-carousel-next aria-label="Next slide">→</button></div>{% endif %}<div class="slideshow__track" data-carousel-track tabindex="0" role="region" aria-label="Slideshow">{% for block in section.blocks %}{% if block.settings.image != blank or block.settings.heading != blank or block.settings.text != blank %}<article class="slideshow__slide" {{ block.shopify_attributes }}><div class="split{% if block.settings.image == blank %} split--text-only{% endif %}">{% if block.settings.image != blank %}<div class="split__media">{% render 'image', image: block.settings.image, width: 1200, sizes: '(min-width: 750px) 50vw, 100vw' %}</div>{% endif %}<div class="split__content"><p class="eyebrow">{{ block.settings.eyebrow | escape }}</p><h2>{{ block.settings.heading | escape }}</h2><p>{{ block.settings.text | escape }}</p>{% if block.settings.button_label != blank and block.settings.button_link != blank %}<a class="button button--secondary" href="{{ block.settings.button_link }}">{{ block.settings.button_label | escape }}</a>{% endif %}</div></div></article>{% endif %}{% endfor %}</div>{% if slide_count == 0 and request.design_mode %}<p class="editor-help">Add slide content.</p>{% endif %}</div></section>{% endif %}
 {% schema %}
 {
   "name": "Slideshow",
@@ -87,11 +87,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

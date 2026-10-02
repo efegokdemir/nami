@@ -1,5 +1,5 @@
-{% render 'section-style', section: section %}
-<section class="section"><div class="page-width">{{ section.settings.custom_liquid }}</div></section>
+{% if section.settings.custom_liquid != blank or request.design_mode %}
+{% render 'section-style', section: section %}<section class="section"><div class="page-width">{% if section.settings.custom_liquid != blank %}{{ section.settings.custom_liquid }}{% elsif request.design_mode %}<p class="editor-help">Add Custom Liquid content.</p>{% endif %}</div></section>{% endif %}
 {% schema %}
 {
   "name": "Custom Liquid",
@@ -71,11 +71,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

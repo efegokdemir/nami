@@ -1,6 +1,6 @@
 {% assign meaningful_blocks = 0 %}{% for block in section.blocks %}{% if block.settings.heading != blank or block.settings.text != blank or block.settings.image != blank or block.settings.icon != blank and block.settings.icon != 'none' %}{% assign meaningful_blocks = meaningful_blocks | plus: 1 %}{% endif %}{% endfor %}{% if meaningful_blocks > 0 or request.design_mode %}
 {% render 'section-style', section: section %}
-{% if section.blocks.size > 0 or request.design_mode %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width"><div class="section-heading"><div><h2>{{ section.settings.heading | escape }}</h2>{{ section.settings.text }}</div></div><div class="content-columns layout-{{ section.settings.layout }} align-{{ section.settings.content_alignment }}" style="--desktop-columns:{{ section.settings.desktop_columns }};--mobile-columns:{{ section.settings.mobile_columns }}">
+{% if section.blocks.size > 0 or request.design_mode %}<section class="section icon-list color-{{ section.settings.color_scheme }}"><div class="page-width"><div class="section-heading"><div><h2>{{ section.settings.heading | escape }}</h2>{{ section.settings.text }}</div></div><div class="content-columns layout-{{ section.settings.layout }} align-{{ section.settings.content_alignment }}" style="--desktop-columns:{{ section.settings.desktop_columns }};--mobile-columns:{{ section.settings.mobile_columns }}">
 {% for block in section.blocks %}{% if request.design_mode or block.settings.heading != blank or block.settings.text != blank or block.settings.image != blank or block.settings.icon != blank and block.settings.icon != 'none' %}<article class="content-column{% if section.settings.cards %} content-column--card{% endif %}" {{ block.shopify_attributes }}>{% if block.settings.image != blank %}<div class="content-column__media ratio-{{ section.settings.image_ratio }}">{% render 'image', image: block.settings.image, width: 700 %}</div>{% elsif block.settings.icon != 'none' and block.settings.icon != blank %}<div class="feature-icon">{% render 'icon', name: block.settings.icon %}</div>{% endif %}{% if block.settings.heading != blank %}<h3>{{ block.settings.heading | escape }}</h3>{% endif %}{{ block.settings.text }}{% if block.settings.link != blank %}<a class="text-link" href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a>{% endif %}</article>{% endif %}{% endfor %}</div></div></section>{% endif %}
 
 {% endif %}
@@ -41,7 +41,7 @@
           "label": "Two"
         }
       ],
-      "default": "1"
+      "default": "2"
     },
     {
       "type": "select",
@@ -215,18 +215,18 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",
           "label": "Custom"
         }
       ],
-      "default": "normal"
+      "default": "compact"
     },
     {
       "type": "range",

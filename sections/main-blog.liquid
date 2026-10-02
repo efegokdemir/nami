@@ -1,5 +1,7 @@
+{% paginate blog.articles by 24 %}
 {% render 'section-style', section: section %}
 <section class="section"><div class="page-width"><div class="section-heading"><h1>{{ blog.title }}</h1></div><div class="grid grid--columns">{% for article in blog.articles %}<article class="card"><p class="eyebrow">{{ article.published_at | time_tag: format: 'date' }}</p><h2><a href="{{ article.url }}">{{ article.title }}</a></h2><p>{{ article.excerpt_or_content | strip_html | truncate: 140 }}</p><a class="button button--link" href="{{ article.url }}">Read article</a></article>{% endfor %}</div></div></section>
+{% if paginate.pages > 1 %}<nav class="page-width pagination" aria-label="Pagination">{{ paginate | default_pagination }}</nav>{% endif %}{% endpaginate %}
 {% schema %}
 {
   "name": "Blog",
@@ -106,11 +108,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",
@@ -146,6 +148,11 @@
     {
       "name": "Blog"
     }
-  ]
+  ],
+  "enabled_on": {
+    "templates": [
+      "blog"
+    ]
+  }
 }
 {% endschema %}

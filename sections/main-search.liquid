@@ -1,5 +1,7 @@
+{% paginate search.results by 24 %}
 {% render 'section-style', section: section %}
 <section class="section"><div class="page-width"><div class="section-heading"><div><p class="eyebrow">Search</p><h1>Find your next favorite.</h1></div></div><form action="{{ routes.search_url }}" method="get" role="search"><label class="visually-hidden" for="SearchInput">{{ 'general.search.search' | t }}</label><input class="search-input" id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}"></form>{% if search.performed %}{% if search.results_count > 0 %}<div class="grid grid--products" style="margin-top:2rem">{% for item in search.results %}{% if item.object_type == 'product' %}{% render 'product-card', product: item, show_vendor: section.settings.show_vendor, show_price: section.settings.show_price, show_badges: section.settings.show_badges, show_second_image: section.settings.show_second_image, show_quick_add: section.settings.show_quick_add, show_swatches: section.settings.show_swatches, image_ratio: section.settings.image_ratio, card_style: section.settings.card_style, card_alignment: section.settings.card_alignment %}{% else %}<article class="card"><p class="eyebrow">{{ item.object_type }}</p><h2><a href="{{ item.url }}">{{ item.title }}</a></h2></article>{% endif %}{% endfor %}</div>{% else %}<div class="card" style="margin-top:2rem"><p>{{ 'general.search.no_results' | t }}</p></div>{% endif %}{% endif %}</div></section>
+{% if paginate.pages > 1 %}<nav class="page-width pagination" aria-label="Pagination">{{ paginate | default_pagination }}</nav>{% endif %}{% endpaginate %}
 {% schema %}
 {
   "name": "Search results",
@@ -106,11 +108,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",
@@ -242,6 +244,11 @@
     {
       "name": "Search results"
     }
-  ]
+  ],
+  "enabled_on": {
+    "templates": [
+      "search"
+    ]
+  }
 }
 {% endschema %}

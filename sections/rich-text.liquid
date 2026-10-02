@@ -1,5 +1,5 @@
-{% render 'section-style', section: section %}
-<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width rich-text"><p class="eyebrow">{{ section.settings.eyebrow }}</p><h2>{{ section.settings.heading }}</h2><div>{{ section.settings.text }}</div>{% if section.settings.button_label != blank %}<a class="button button--link" href="{{ section.settings.button_link }}">{{ section.settings.button_label }} {% render 'icon', name: 'arrow' %}</a>{% endif %}</div></section>
+{% render 'section-style', section: section, reading_width: 720 %}
+<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width rich-text"><p class="eyebrow">{{ section.settings.eyebrow }}</p><h2>{{ section.settings.heading }}</h2><div>{{ section.settings.text }}</div>{% if section.settings.button_label != blank and section.settings.button_link != blank %}<a class="button button--link" href="{{ section.settings.button_link }}">{{ section.settings.button_label }} {% render 'icon', name: 'arrow' %}</a>{% endif %}</div></section>
 {% schema %}
 {
   "name": "Rich text",
@@ -112,11 +112,11 @@
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",

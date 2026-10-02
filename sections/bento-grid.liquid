@@ -35,7 +35,7 @@ assign tile_url = block.settings.link | default: block.settings.product.url | de
       "min": 200,
       "max": 400,
       "step": 20,
-      "default": 280,
+      "default": 200,
       "unit": "px"
     },
     {
@@ -140,11 +140,11 @@ assign tile_url = block.settings.link | default: block.settings.product.url | de
         },
         {
           "value": "normal",
-          "label": "Normal"
+          "label": "Standard"
         },
         {
           "value": "spacious",
-          "label": "Spacious"
+          "label": "Generous"
         },
         {
           "value": "custom",
@@ -289,7 +289,8 @@ assign tile_url = block.settings.link | default: block.settings.product.url | de
           "max": 90,
           "step": 5,
           "default": 30,
-          "unit": "%"
+          "unit": "%",
+          "visible_if": "{{ block.settings.presentation == 'overlay' }}"
         },
         {
           "type": "color_scheme",
