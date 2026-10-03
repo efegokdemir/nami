@@ -5,6 +5,13 @@
     assign has_media = true
   endif
   assign layout = section.settings.layout | default: 'split'
+  assign auto_contrast = false
+  assign scheme_id = section.settings.color_scheme | append: ''
+  if has_media and layout != 'split'
+    if scheme_id == blank or scheme_id == 'scheme-1'
+      assign auto_contrast = true
+    endif
+  endif
   assign heading_tag = section.settings.heading_tag | default: 'h1'
   assign media_position = section.settings.media_position
   if legacy and section.settings.reverse
@@ -12,7 +19,7 @@
   endif
 %}
 {% if has_media or section.settings.heading != blank or section.settings.text != blank or request.design_mode %}
-<section class="section hero capability-hero capability-hero--{{ layout }}{% unless has_media %} capability-hero--empty{% endunless %} color-{{ section.settings.color_scheme }}" style="--hero-height:{{ section.settings.height | default: 420 }}px;--hero-mobile-height:{{ section.settings.mobile_height | default: 240 }}px;--hero-text-width:{{ section.settings.text_width | default: 560 }}px;--hero-overlay:{{ section.settings.overlay | divided_by: 100.0 }};--hero-overlay-color:{{ section.settings.overlay_color }};--hero-position:{{ section.settings.image_position }};--hero-valign:{{ section.settings.vertical_alignment | default: 'center' }}">
+<section class="section hero capability-hero capability-hero--{{ layout }}{% if auto_contrast %} capability-hero--auto-contrast{% endif %}{% unless has_media %} capability-hero--empty{% endunless %} color-{{ section.settings.color_scheme }}" style="--hero-height:{{ section.settings.height | default: 420 }}px;--hero-mobile-height:{{ section.settings.mobile_height | default: 240 }}px;--hero-text-width:{{ section.settings.text_width | default: 560 }}px;--hero-overlay:{{ section.settings.overlay | divided_by: 100.0 }};--hero-overlay-color:{{ section.settings.overlay_color }};--hero-position:{{ section.settings.image_position }};--hero-valign:{{ section.settings.vertical_alignment | default: 'center' }}">
   <div class="page-width capability-hero__layout{% if media_position == 'right' %} media-right{% endif %} mobile-media-{{ section.settings.mobile_order }} height-{{ section.settings.height_mode | default: 'fixed' }}">
     {% if has_media %}<div class="capability-hero__media"{% if section.settings.autoplay %} data-autoplay-video{% endif %}>
       {% if section.settings.video != blank %}{{ section.settings.video | video_tag: image_size: '1600x', autoplay: false, loop: section.settings.loop, muted: true, controls: section.settings.controls }}

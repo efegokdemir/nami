@@ -8,8 +8,14 @@
   const placeHotspotPanel = details => {
     const panel = $('.product-hotspot__panel',details); if (!panel || !details.open) return;
     const rect = details.getBoundingClientRect(),edge = 12;
+    const viewportHeight = document.documentElement.clientHeight || innerHeight;
+    const header = document.querySelector?.('[data-header]');
+    const topEdge = Math.max(edge,(header?.getBoundingClientRect?.().bottom || 0)+edge);
+    panel.style?.setProperty('--panel-max-height',`${Math.max(44,viewportHeight-topEdge-edge)}px`);
     const left = Math.max(edge,Math.min(rect.left,document.documentElement.clientWidth-panel.offsetWidth-edge));
-    const top = Math.max(edge,Math.min(rect.bottom+8,innerHeight-panel.offsetHeight-edge));
+    const top = Math.max(topEdge,Math.min(rect.bottom+8,viewportHeight-panel.offsetHeight-edge));
+    panel.style?.setProperty('--panel-left',`${left}px`);
+    panel.style?.setProperty('--panel-top',`${top}px`);
     details.style.setProperty('--hotspot-offset',`${left-rect.left}px`);
     details.style.setProperty('--hotspot-top',`${top-rect.top}px`);
   };
@@ -55,6 +61,8 @@
   const updateCarousel = container => {
     const track = $('[data-carousel-track]',container); if (!track) return;
     const prev = $('[data-carousel-prev]',container), next = $('[data-carousel-next]',container);
+    const controls = $('.carousel-controls',container);
+    if (controls) controls.hidden = track.scrollWidth <= track.clientWidth + 2;
     if (prev) prev.disabled = track.scrollLeft <= 1;
     if (next) next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
   };
@@ -103,6 +111,16 @@
       container.classList.add('is-enhanced'); input.dataset.capabilitiesReady = 'true';
       const update = () => container.style.setProperty('--comparison',`${input.value}%`);
       input.addEventListener('input',update); update();
+      const surface = $('.image-comparison__images',container);
+      if (surface) {
+        const drag = event => {
+          const rect = surface.getBoundingClientRect();
+          input.value = Math.round(Math.max(0,Math.min(100,(event.clientX-rect.left)/rect.width*100)));
+          update();
+        };
+        surface.addEventListener('pointerdown',event => { if (event.button !== 0) return; surface.setPointerCapture(event.pointerId); input.focus({preventScroll:true}); drag(event); });
+        surface.addEventListener('pointermove',event => { if (surface.hasPointerCapture(event.pointerId)) drag(event); });
+      }
     });
     $$('[data-product-recommendations]',root).forEach(section => {
       if (!section.dataset.productId || section.dataset.capabilitiesReady) return; section.dataset.capabilitiesReady = 'true';
@@ -154,6 +172,7 @@
     if (details.matches('.product-hotspot')) {
       $$('.product-hotspot',details.parentElement).filter(other => other !== details).forEach(other => { other.open = false; });
       placeHotspotPanel(details);
+      requestAnimationFrame(() => { if (details.isConnected && details.open) placeHotspotPanel(details); });
     }
   },true);
   document.addEventListener('keydown',event => {
@@ -167,7 +186,7 @@
       const controls = [$('[data-search-input]'),...$$('[data-predictive-results] a')],i = controls.indexOf(document.activeElement);
       if (i >= 0 && controls.length > 1) { event.preventDefault(); controls[(i + (event.key === 'ArrowDown' ? 1 : -1) + controls.length) % controls.length].focus(); }
     }
-    if (event.key === 'Escape') $$('.product-hotspot[open],.desktop-nav details[open]').forEach(details => { details.open = false; });
+    if (event.key === 'Escape') $$('.product-hotspot[open],.desktop-nav details[open]').forEach(details => { details.open = false; $('summary',details)?.focus(); });
     const filter = $('.filter-popover[open]');
     if (filter && innerWidth < 750) {
       if (event.key === 'Escape') { filter.open = false; $('summary',filter).focus(); }
