@@ -1,5 +1,6 @@
 {% render 'section-style', section: section %}
-{% if section.settings.image != blank or request.design_mode %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width"><div class="section-heading"><h2>{{ section.settings.heading | escape }}</h2></div><div class="shoppable-image">{% render 'image', image: section.settings.image, width: 1800 %}{% for block in section.blocks %}{% if block.settings.product != blank %}<details class="product-hotspot" style="left:{{ block.settings.left }}%;top:{{ block.settings.top }}%" {{ block.shopify_attributes }}><summary aria-label="{{ block.settings.label | default: block.settings.product.title | escape }}">+</summary><div class="product-hotspot__panel">{% render 'product-card', product: block.settings.product, card_context: block.id, show_second_image: false, show_quick_add: section.settings.show_quick_add, image_ratio: 'square' %}</div></details>{% elsif request.design_mode %}<span class="editor-help" {{ block.shopify_attributes }}>Select a hotspot product.</span>{% endif %}{% endfor %}</div></div></section>{% endif %}
+{% if section.settings.image != blank %}<style>#shopify-section-{{ section.id }} .shoppable-image { --shoppable-width:{{ section.settings.image.aspect_ratio | times: 600 }}px; }</style>{% endif %}
+{% if section.settings.image != blank %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width"><div class="section-heading"><h2>{{ section.settings.heading | escape }}</h2></div><div class="shoppable-image">{% render 'image', image: section.settings.image, width: 1400 %}{% for block in section.blocks %}{% if block.settings.product != blank %}<details class="product-hotspot" style="left:{{ block.settings.left }}%;top:{{ block.settings.top }}%" {{ block.shopify_attributes }}><summary aria-label="{{ block.settings.label | default: block.settings.product.title | escape }}"><span aria-hidden="true">{{ forloop.index }}</span></summary><div class="product-hotspot__panel"><button type="button" class="hotspot-close" data-hotspot-close aria-label="Close product details">×</button>{% render 'product-card', product: block.settings.product, card_context: block.id, show_second_image: false, show_quick_add: section.settings.show_quick_add, image_ratio: 'square' %}</div></details>{% elsif request.design_mode %}<span class="editor-help" {{ block.shopify_attributes }}>Select a hotspot product.</span>{% endif %}{% endfor %}</div></div></section>{% elsif request.design_mode %}<section class="section"><div class="page-width"><p class="editor-help">Choose an image before placing product markers.</p></div></section>{% endif %}
 {% schema %}
 {
   "name": "Shoppable image",
@@ -18,7 +19,8 @@
       "type": "checkbox",
       "id": "show_quick_add",
       "label": "Show Quick Add",
-      "default": true
+      "default": true,
+      "visible_if": "{{ section.settings.image != blank }}"
     },
     {
       "type": "header",

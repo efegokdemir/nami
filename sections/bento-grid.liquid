@@ -1,11 +1,12 @@
-{% assign meaningful_blocks = 0 %}{% for block in section.blocks %}{% if block.settings.heading != blank or block.settings.image != blank or block.settings.product != blank or block.settings.collection != blank %}{% assign meaningful_blocks = meaningful_blocks | plus: 1 %}{% endif %}{% endfor %}{% if meaningful_blocks > 0 or request.design_mode %}
+{% assign meaningful_blocks = 0 %}{% for block in section.blocks %}{% if block.settings.heading != blank or block.settings.text != blank or block.settings.image != blank or block.settings.product != blank or block.settings.collection != blank %}{% assign meaningful_blocks = meaningful_blocks | plus: 1 %}{% endif %}{% endfor %}{% if meaningful_blocks > 0 or request.design_mode %}
 {% render 'section-style', section: section %}
 {% if section.blocks.size > 0 or request.design_mode %}<section class="section color-{{ section.settings.color_scheme }}"><div class="page-width"><div class="section-heading"><h2>{{ section.settings.heading | escape }}</h2></div><div class="capability-bento" style="--bento-columns:{{ section.settings.columns }};--bento-row-height:{{ section.settings.row_height }}px">
 {% for block in section.blocks %}{% liquid
-assign tile_image = block.settings.image | default: block.settings.product.featured_image | default: block.settings.collection.image
-assign tile_title = block.settings.heading | default: block.settings.product.title | default: block.settings.collection.title
-assign tile_url = block.settings.link | default: block.settings.product.url | default: block.settings.collection.url
-%}{% if tile_title != blank or tile_image != blank or request.design_mode %}<article class="bento-tile bento-tile--{{ block.settings.size }} bento-tile--{{ block.settings.presentation }} color-{{ block.settings.color_scheme }} align-{{ block.settings.alignment }}" {{ block.shopify_attributes }} style="--tile-overlay:{{ block.settings.overlay | divided_by: 100.0 }}">
+assign tile_resource = block.settings.product | default: block.settings.collection
+assign tile_image = block.settings.image | default: tile_resource.featured_image | default: tile_resource.image
+assign tile_title = block.settings.heading | default: tile_resource.title
+assign tile_url = block.settings.link | default: tile_resource.url
+%}{% if tile_title != blank or tile_image != blank or block.settings.text != blank or request.design_mode %}<article class="bento-tile bento-tile--{{ block.settings.size }}{% if tile_image != blank %} bento-tile--{{ block.settings.presentation }}{% else %} bento-tile--content{% endif %} color-{{ block.settings.color_scheme }} align-{{ block.settings.alignment }}" {{ block.shopify_attributes }} style="--tile-overlay:{{ block.settings.overlay | divided_by: 100.0 }}">
 {% if tile_image != blank %}<div class="bento-tile__media"><picture>{% if block.settings.mobile_image != blank %}<source media="(max-width:749px)" srcset="{{ block.settings.mobile_image | image_url: width: 900 }}">{% endif %}{% render 'image', image: tile_image, width: 1400 %}</picture></div>{% elsif request.design_mode %}{% render 'image' %}{% endif %}<div class="bento-tile__content">{% if block.settings.eyebrow != blank %}<p class="eyebrow">{{ block.settings.eyebrow | escape }}</p>{% endif %}<h3>{% if tile_url != blank %}<a href="{{ tile_url }}">{{ tile_title | escape }}</a>{% else %}{{ tile_title | escape }}{% endif %}</h3>{{ block.settings.text }}{% if block.settings.product != blank %}<div class="price">{{ block.settings.product.price | money }}</div>{% endif %}</div></article>{% endif %}{% endfor %}
 </div></div></section>{% endif %}
 
@@ -184,27 +185,31 @@ assign tile_url = block.settings.link | default: block.settings.product.url | de
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
+          "label": "Image override",
+          "info": "Optional. Replaces the selected product or collection image."
         },
         {
           "type": "image_picker",
           "id": "mobile_image",
-          "label": "Mobile image"
+          "label": "Mobile image override",
+          "visible_if": "{{ block.settings.image != blank or block.settings.product != blank or block.settings.collection != blank }}"
         },
         {
           "type": "product",
           "id": "product",
-          "label": "Product"
+          "label": "Product (takes priority)",
+          "info": "Uses this product's title, link and price. Clear it to use a collection or your own content."
         },
         {
           "type": "collection",
           "id": "collection",
-          "label": "Collection"
+          "label": "Collection fallback",
+          "info": "Used only when no product is selected. Your heading, image and link can override the selected resource."
         },
         {
           "type": "text",
           "id": "heading",
-          "label": "Heading"
+          "label": "Heading override"
         },
         {
           "type": "text",
@@ -219,12 +224,13 @@ assign tile_url = block.settings.link | default: block.settings.product.url | de
         {
           "type": "url",
           "id": "link",
-          "label": "Link"
+          "label": "Link override"
         },
         {
           "type": "select",
           "id": "size",
           "label": "Item size",
+          "visible_if": "{{ block.settings.image != blank or block.settings.product != blank or block.settings.collection != blank }}",
           "options": [
             {
               "value": "standard",
@@ -259,7 +265,8 @@ assign tile_url = block.settings.link | default: block.settings.product.url | de
               "label": "Over image"
             }
           ],
-          "default": "below"
+          "default": "below",
+          "visible_if": "{{ block.settings.image != blank or block.settings.product != blank or block.settings.collection != blank }}"
         },
         {
           "type": "select",
@@ -290,7 +297,7 @@ assign tile_url = block.settings.link | default: block.settings.product.url | de
           "step": 5,
           "default": 30,
           "unit": "%",
-          "visible_if": "{{ block.settings.presentation == 'overlay' }}"
+          "visible_if": "{{ block.settings.presentation == 'overlay' and block.settings.image != blank or block.settings.presentation == 'overlay' and block.settings.product != blank or block.settings.presentation == 'overlay' and block.settings.collection != blank }}"
         },
         {
           "type": "color_scheme",

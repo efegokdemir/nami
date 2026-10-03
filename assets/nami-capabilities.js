@@ -5,6 +5,30 @@
   const money = cents => window.namiMoney(cents);
   const observers = new Map();
   const requests = new Map();
+  const placeHotspotPanel = details => {
+    const panel = $('.product-hotspot__panel',details); if (!panel || !details.open) return;
+    const rect = details.getBoundingClientRect(),edge = 12;
+    const left = Math.max(edge,Math.min(rect.left,document.documentElement.clientWidth-panel.offsetWidth-edge));
+    const top = Math.max(edge,Math.min(rect.bottom+8,innerHeight-panel.offsetHeight-edge));
+    details.style.setProperty('--hotspot-offset',`${left-rect.left}px`);
+    details.style.setProperty('--hotspot-top',`${top-rect.top}px`);
+  };
+  const separateHotspots = (root = document) => {
+    $$('.shoppable-image',root).forEach(image => {
+      const box = image.getBoundingClientRect(); if (!box.width || !box.height) return;
+      const placed = [];
+      $$('.product-hotspot',image).forEach(details => {
+        const originalX = parseFloat(details.style.left)*box.width/100,originalY = parseFloat(details.style.top)*box.height/100;
+        let x = Math.max(22,Math.min(box.width-22,originalX)),y = Math.max(22,Math.min(box.height-22,originalY));
+        for(let i=0;i<placed.length+1 && placed.some(p=>Math.hypot(p.x-x,p.y-y)<44);i++) {
+          y = originalY+44*(i+1) <= box.height-22 ? originalY+44*(i+1) : Math.max(22,originalY-44*(i+1));
+          if(placed.some(p=>Math.hypot(p.x-x,p.y-y)<44)) x = Math.max(22,Math.min(box.width-22,originalX+44*(i+1)));
+        }
+        placed.push({x,y}); details.style.setProperty('--marker-shift-x',`${x-originalX}px`); details.style.setProperty('--marker-shift-y',`${y-originalY}px`); placeHotspotPanel(details);
+      });
+    });
+  };
+  let hotspotScrollBound = false;
   let headerScrollBound = false;
   const syncHeader = () => {
     const header = $('[data-header]'),hero = $('main > .shopify-section:first-child .capability-hero:not(.capability-hero--empty)');
@@ -40,6 +64,13 @@
     $$('[data-tab-panel]',tabs).forEach((panel,i) => { panel.hidden = i !== index; });
   };
   const init = (root = document) => {
+    if ($('.shoppable-image') && !hotspotScrollBound) {
+      window.addEventListener('resize',() => separateHotspots());
+      window.addEventListener('scroll',() => $$('.product-hotspot[open]').forEach(placeHotspotPanel),{passive:true});
+      hotspotScrollBound = true;
+    }
+    separateHotspots(root);
+    $$('.shoppable-image > img',root).forEach(image => { if(!image.dataset.hotspotReady) { image.dataset.hotspotReady = 'true'; image.addEventListener('load',() => separateHotspots(image.closest('.shoppable-image').parentElement)); } });
     if ($('[data-header]')) {
       if (!headerScrollBound) { window.addEventListener('scroll',syncHeader,{passive:true}); window.addEventListener('resize',syncHeader); headerScrollBound = true; }
       syncHeader();
@@ -114,6 +145,7 @@
     }
     if (button.matches('[data-quantity-plus],[data-quantity-minus]')) { const input = $('[data-product-quantity]',button.closest('[data-product-section]') || button.closest('form')); if (input) input.value = Math.max(1,Number(input.value || 1) + (button.hasAttribute('data-quantity-plus') ? 1 : -1)); }
     if (button.matches('[data-share-url]')) { const share = {title:button.dataset.shareTitle,url:button.dataset.shareUrl}; const operation = navigator.share ? navigator.share(share) : navigator.clipboard?.writeText(share.url); operation?.catch(() => {}); }
+    if (button.matches('[data-hotspot-close]')) { const details = button.closest('.product-hotspot'); details.open = false; $('summary',details)?.focus(); }
   });
   document.addEventListener('change',event => { if (event.target.matches('[data-product-option]')) updateVariant(event.target.closest('[data-product-section]')); });
   document.addEventListener('toggle',event => {
@@ -121,8 +153,7 @@
     const accordion = details.closest('[data-single-open]'); if (accordion) $$('details',accordion).filter(other => other !== details).forEach(other => { other.open = false; });
     if (details.matches('.product-hotspot')) {
       $$('.product-hotspot',details.parentElement).filter(other => other !== details).forEach(other => { other.open = false; });
-      const panel = $('.product-hotspot__panel',details),rect = details.getBoundingClientRect();
-      details.style.setProperty('--hotspot-offset',`${Math.max(20 - rect.left,Math.min(0,innerWidth - rect.left - panel.offsetWidth - 20))}px`);
+      placeHotspotPanel(details);
     }
   },true);
   document.addEventListener('keydown',event => {

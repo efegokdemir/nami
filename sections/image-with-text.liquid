@@ -22,7 +22,8 @@
     {
       "type": "select",
       "id": "media_position",
-      "label": "Media position",
+      "label": "Desktop image side",
+      "visible_if": "{{ section.settings.image != blank }}",
       "options": [
         {
           "value": "left",
@@ -43,7 +44,9 @@
       "max": 65,
       "step": 5,
       "default": 50,
-      "unit": "%"
+      "unit": "%",
+      "info": "Tablet layouts use balanced columns to keep text readable.",
+      "visible_if": "{{ section.settings.image != blank }}"
     },
     {
       "type": "select",
@@ -67,7 +70,8 @@
           "label": "Landscape"
         }
       ],
-      "default": "square"
+      "default": "square",
+      "visible_if": "{{ section.settings.image != blank }}"
     },
     {
       "type": "select",
@@ -83,12 +87,14 @@
           "label": "Overlapping content"
         }
       ],
-      "default": "adjacent"
+      "default": "adjacent",
+      "visible_if": "{{ section.settings.image != blank }}"
     },
     {
       "type": "select",
       "id": "vertical_alignment",
-      "label": "Content vertical alignment",
+      "label": "Desktop text position",
+      "visible_if": "{{ section.settings.image != blank }}",
       "options": [
         {
           "value": "start",
@@ -139,7 +145,8 @@
           "label": "Below content"
         }
       ],
-      "default": "first"
+      "default": "first",
+      "visible_if": "{{ section.settings.image != blank }}"
     },
     {
       "type": "text",
@@ -149,7 +156,8 @@
     {
       "type": "text",
       "id": "heading",
-      "label": "Intro heading"
+      "label": "Intro heading",
+      "info": "Shown before content blocks. Leave blank if a Heading block already supplies this copy."
     },
     {
       "type": "richtext",
