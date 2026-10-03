@@ -6,4 +6,6 @@ Authenticated unpublished-theme testing for the capability overhaul is recorded 
 
 Run `node scripts/validate-theme.cjs` for JSON/schema/template validation and `node --check assets/nami.js` / `node --check assets/nami-capabilities.js` for syntax. GitHub Actions runs these checks and Theme Check.
 
+Also run `node scripts/test-hardening.cjs`, `node scripts/test-upgrade.cjs`, `node scripts/test-p01.cjs`, `node scripts/test-p2.cjs` and `node scripts/test-polish.cjs`. These are regression contracts, not substitutes for rendered or manual Theme Editor QA. The later [core polish report](v0.3-core-polish-qa.md) supersedes the historical P2 draft's open-gate status.
+
 The configuration in `docs/fixtures/index.capability-qa.json` uses existing QA-store resources only. It is intentionally outside `templates/`, so it is not a merchant default or uploaded alternate template. Copy it temporarily to a local test checkout's `templates/index.json` for reproducible section exercises, then restore the generic template before any production artifact.

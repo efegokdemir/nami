@@ -17,6 +17,10 @@ for (const width of [320,390,768,1440]) for (const y of [0,450,856]) {
   assert.ok(panelProps['--panel-top']+331<=888);
 }
 assert.match(css,/product-hotspot__panel[^\n]*position:fixed/);
+assert.match(css,/merch-grid:has\(> \.collection-tile\)[^\n]*align-items:end/);
+assert.match(css,/product-hotspot__panel \.product-card__content[^\n]*order:1/);
+assert.match(css,/product-hotspot__panel \.card-quick-add[^\n]*order:2/);
+assert.match(read('assets/nami-overhaul.css'),/\.drawer \.cart-footer-actions > form[^\n]*grid-column:1\/-1/);
 assert.doesNotMatch(css,/\.product-hotspot \{[^\n]*transform:/);
 assert.match(js,/controls\.hidden = track\.scrollWidth <= track\.clientWidth/);
 assert.match(js,/surface\.addEventListener\('pointerdown'/);

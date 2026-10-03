@@ -30,6 +30,8 @@ The current development branch includes 45 merchant-facing sections and 11 reusa
 
 Merchants supply their own content. No lifestyle photos, fake endorsements or curated QA-store products ship as default merchandising. Resource-dependent sections hide missing content on live pages and offer setup guidance in Theme Editor. See the [section capability reference](docs/section-capabilities.md) for controls and supported blocks.
 
+These are implementation capabilities, not a claim of exhaustive integration coverage. See [core polish verification and known limits](docs/v0.3-core-polish-qa.md). Native swatch metadata and Shopify-hosted video/3D need matching product fixtures; arbitrary app compatibility and physical-device coverage remain integration-test limits. Subscription-only purchasing requires an app as explained below. No performance benchmark or Lighthouse score is claimed.
+
 The native product form does not select or submit selling plans. Subscription-only products require an app integration that supplies the selling-plan controls and submission; a product-page link alone does not enable subscription purchases. Upgrading from v0.2.0 requires the saved-configuration migration before upload; comparison content and supported aliases are converted offline, while removed copy is archived for manual review. See the [exact upgrade procedure](docs/upgrade-v02.md).
 
 ## Quality and scope
