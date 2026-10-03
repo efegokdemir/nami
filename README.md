@@ -1,6 +1,6 @@
 # Nami
 
-Nami is a calm, flexible, mobile-first Shopify theme for real commerce. It is free and open source under the MIT license, with no required apps, external services, tracking, or build step for merchants.
+Nami is a calm, flexible, mobile-first Shopify Online Store 2.0 theme for real commerce. It is free and open source under the MIT license. Merchants need no app, external theme service, or build step to use its core storefront and commerce features.
 
 ## Install
 
@@ -15,7 +15,7 @@ shopify theme dev --path nami
 shopify theme check --path nami
 ```
 
-Nami uses Shopify's native Online Store architecture: JSON templates, section groups, sections, snippets, app blocks, Liquid forms and the Ajax Cart API. Vanilla enhancements live in `assets/nami.js` and `assets/nami-capabilities.js`; tokens, components and responsive layouts live in the theme CSS assets. No build step is required.
+Nami uses Shopify's native Online Store architecture: JSON templates, section groups, sections, snippets, app blocks, Liquid forms and the Ajax Cart API. Vanilla enhancements live in `assets/nami.js` and `assets/nami-capabilities.js`; tokens, components and responsive layouts live in the theme CSS assets. The theme adds no analytics or tracking scripts, but Shopify and merchant-installed apps or pixels may add their own services. No build step is required.
 
 ## Included experiences
 

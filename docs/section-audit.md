@@ -1,3 +1,7 @@
+# Historical pre-remediation audit
+
+This inventory records the weaknesses found before the v0.3 P0/P1, P2 and core polish passes. Its section grades and defect descriptions are not current. See [the latest core polish report](v0.3-core-polish-qa.md) for the updated core-surface assessment.
+
 # Section capability audit — pre-overhaul
 
 Audited all 44 Liquid sections from the interrupted working tree before cleanup. The generated photographs and bundled-image switches are demo-only changes and will be removed. Retain font delivery, color schemes, responsive foundations, commerce price fixes, account links and editor-only resource guidance. No merchant catalog changes are needed.
